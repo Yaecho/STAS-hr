@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '用户中心-南工学生科协';
+$this->title = '用户中心';
 $this->params['breadcrumbs'][] = '用户中心';
 ?>
 

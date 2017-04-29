@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = '规则管理';
-$this->params['breadcrumbs'][] = '规则管理';
+$this->title = '角色管理';
+$this->params['breadcrumbs'][] = '角色管理';
 ?>
 <div class="portlet light portlet-fit portlet-datatable bordered">
     <div class="portlet-title">
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = '规则管理';
                 <thead>
                 <tr>
                     <th style="width:8px;">#</th>
-                    <th>路径</th>
+                    <th>角色名</th>
                     <th class="hidden-480">描述</th>
                     <th style="width:140px;">添加时间</th>
                     <th style="width:140px;">更新时间</th>
@@ -32,17 +32,19 @@ $this->params['breadcrumbs'][] = '规则管理';
                 <tbody>
 
                 <?php $nn=0;?>
-                <?php foreach ($rule as $key => $value): ?>
+                <?php foreach ($roles as $key => $value): ?>
                     <tr class="odd gradeX">
                         <?php $nn++;?>
                         <td><?=$nn?></td>
-                        <td><?=$value['name']?></td>
-                        <td><?=$value['description']?></td>
-                        <td><?=date('Y-m-d H:i',$value['created_at'])?></td>
-                        <td><?=date('Y-m-d H:i',$value['updated_at'])?></td>
+                        <td><?=$value->name?></td>
+                        <td><?=$value->description?></td>
+                        <td><?=date('Y-m-d H:i',$value->createdAt)?></td>
+                        <td><?=date('Y-m-d H:i',$value->updatedAt)?></td>
                         <td>
-                            <a href="<?=Url::toRoute(['edit', 'rule'=>$value['name']])?>" class="btn btn-xs purple"><i class="fa fa-edit"></i> 编辑</a>
-                            <a href="<?=Url::toRoute(['delete', 'rule'=>$value['name']])?>" class="btn btn-xs red ajax-get confirm"><i class="fa fa-times"></i> 删除</a>
+                            <a href="<?=Url::toRoute(['auth', 'role'=>$key])?>" class="btn btn-xs purple"><i class="fa fa-key"></i> 授权</a>
+                            <a href="<?=Url::toRoute(['user', 'role'=>$key])?>" class="btn btn-xs purple"><i class="fa fa-user"></i> 用户</a>
+                            <a href="<?=Url::toRoute(['edit', 'role'=>$key])?>" class="btn btn-xs purple"><i class="fa fa-edit"></i> 编辑</a>
+                            <a href="<?=Url::toRoute(['delete', 'role'=>$key])?>" class="btn btn-xs red ajax-get confirm"><i class="fa fa-times"></i> 删除</a>
                         </td>
                     </tr>
                 <?php endforeach ?>

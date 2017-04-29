@@ -9,6 +9,7 @@ use yii\grid\GridView;
 
 $this->title = 'User Models';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="user-model-index">
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -26,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'truename',
             'department',
-            'class',
+            //'class',
             'phone',
             'qq',
             'duty',
@@ -38,11 +39,19 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'password_reset_token',
             // 'email_validate_token:email',
             // 'email:email',
-            'role',
-            'status',
+            //'role',
+            'status' => [
+                'label' => '状态',
+                'attribute' => 'status',
+                'value' => function($model){
+
+                    return ($model->status == 10)?'激活':'未激活';
+                },
+                'filter' => ['0'=>'未激活','10'=>'激活']
+            ],
             // 'avatar',
             // 'vip_lv',
-            // 'created_at',
+            //'created_at:datetime',
             // 'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -1,69 +1,78 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\controllers\base\BaseController;
 use Yii;
-use yii\web\Controller;
+use yii\db\Query;
 
 
-class RbacController extends Controller
+class RuleController extends BaseController
 {
-    public function actionInit()
-    {
-        $auth = Yii::$app->authManager;
+    public $authManager;
 
-        // 添加 "createPost" 权限
-        /*$createPost = $auth->createPermission('createPost');
-        $createPost->description = 'Create a post';
-        $auth->add($createPost);
-
-        // 添加 "updatePost" 权限
-        $updatePost = $auth->createPermission('updatePost');
-        $updatePost->description = 'Update post';
-        $auth->add($updatePost);*/
-
-        // 添加 "author" 角色并赋予 "createPost" 权限
-        $name = 'minister';
-        $auth = Yii::$app->authManager;
-        $role = $auth->createRole('interviewer');
-        $role->description = '面试人员';
-        $auth->add($role);
-        //$auth->addChild($author, $createPost);
-
-        // 添加 "admin" 角色并赋予 "updatePost"
-        // 和 "author" 权限
-        /*$admin = $auth->createRole('admin');
-        $auth->add($admin);
-        $auth->addChild($admin, $updatePost);
-        $auth->addChild($admin, $author);
-
-        // 为用户指派角色。其中 1 和 2 是由 IdentityInterface::getId() 返回的id （译者注：user表的id）
-        // 通常在你的 User 模型中实现这个函数。
-        $auth->assign($author, 2);
-        $auth->assign($admin, 1);*/
+    public $enableCsrfValidation = false;
+    /**
+     * ---------------------------------------
+     * 构造方法
+     * ---------------------------------------
+     */
+    public function init(){
+        parent::init();
+        $this->authManager = Yii::$app->authManager;
     }
 
-    public function actionPcreate()
+    public function actionIndex()
     {
-        $auth = Yii::$app->authManager;
-        $createPost = $auth->createPermission('resume/update');
-        $createPost->description = '更新所有部门简历';
-        $auth->add($createPost);
+        $ruleList  = (new Query())
+            ->select(['name','description','created_at','updated_at'])
+            ->from('auth_item')
+            ->where(['type'=>'2'])
+            ->all();
+        //var_dump($ruleList);exit();
+        return $this->render('index',['rule' => $ruleList]);
     }
 
-    public function actionChild()
+    public function actionAdd()
     {
-        $auth = Yii::$app->authManager;
-        $parent = $auth->createRole('admin');                //创建角色对象
-        $child = $auth->createPermission('resume/view');     //创建权限对象
-        $auth->addChild($parent, $child);                           //添加对应关系
+        if (Yii::$app->request->isPost) {
+            $data = Yii::$app->request->post('param');
+            /* 创建角色 */
+            $rule = Yii::$app->authManager->createPermission($data['name']);
+            $rule->type = 2;
+            $rule->description = $data['description'];
+            if (Yii::$app->authManager->add($rule)) {
+                return $this->redirect(['rule/index']);
+            }
+
+        }
+        return $this->render('add');
     }
 
-    public function actionUser()
-    {
-        $auth = Yii::$app->authManager;
-        $role = $auth->createRole('admin');                //创建角色对象
-        $user_id = 1;                                             //获取用户id，此处假设用户id=1
-        $auth->assign($role, $user_id);                           //添加对应关系
+    public function actionEdit($rule){
+
+        $rule = Yii::$app->authManager->getPermission($rule);
+        $ruleName = $rule->name;
+
+        if (Yii::$app->request->isPost) {
+            $data = Yii::$app->request->post('param');
+            $rule->name = $data['name'];
+            $rule->description = $data['description'];
+            if (Yii::$app->authManager-> update($ruleName,$rule)) {
+                return $this->redirect(['rule/index']);
+            }
+
+        }
+
+        return $this->render('edit',[
+            'rule' => $rule,
+        ]);
+    }
+
+    public function actionDelete($rule){
+        $rule = Yii::$app->authManager->getPermission($rule);
+        if (Yii::$app->authManager->remove($rule)) {
+            return $this->redirect(['rule/index']);
+        }
     }
 
 }

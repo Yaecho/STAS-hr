@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title>南工学生科协-<?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => $this->title,
+        'brandLabel' => '南工学生科协',
         'brandUrl' => \yii\helpers\Url::to(['space/index']),
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top navbar',
@@ -64,13 +64,14 @@ AppAsset::register($this);
         <div class="row">
             <div class="col-md-3">
                 <div class="list-group">
-                    <a href="<?=Url::to(['user/index'])?>" class="list-group-item active">
+                    <a href="<?=Url::to(['user/index'])?>" class="list-group-item">
                         用户管理
                     </a>
                     <a href="<?=Url::to(['resume/index'])?>" class="list-group-item">简历管理</a>
                     <a href="#" class="list-group-item">简历回收站</a>
-                    <a href="#" class="list-group-item">个人信息</a>
-                    <a href="#" class="list-group-item">...管理</a>
+                    <a href="<?=Url::to(['auth/index'])?>" class="list-group-item">角色管理</a>
+                    <a href="<?=Url::to(['rule/index'])?>" class="list-group-item">规则管理</a>
+                    <a href="<?=Url::to(['user-role/index'])?>" class="list-group-item">用户授权</a>
                 </div>
             </div>
             <div class="col-md-9">
