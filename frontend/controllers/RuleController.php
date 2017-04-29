@@ -45,8 +45,8 @@ class RbacController extends Controller
     public function actionPcreate()
     {
         $auth = Yii::$app->authManager;
-        $createPost = $auth->createPermission('resume/index');
-        $createPost->description = '查看所有简历';
+        $createPost = $auth->createPermission('resume/update');
+        $createPost->description = '更新所有部门简历';
         $auth->add($createPost);
     }
 
@@ -54,7 +54,7 @@ class RbacController extends Controller
     {
         $auth = Yii::$app->authManager;
         $parent = $auth->createRole('admin');                //创建角色对象
-        $child = $auth->createPermission('resume/index');     //创建权限对象
+        $child = $auth->createPermission('resume/view');     //创建权限对象
         $auth->addChild($parent, $child);                           //添加对应关系
     }
 
