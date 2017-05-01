@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = '角色授权管理';
                 <div class="panel-heading">角色权限授予</div>
                 <div class="panel-body">
                     <?php foreach ($node_list as $node): ?>
-                        <?php if($node['type'] === '1'):?>
+                        <?php if ($node['type'] === '1' and $node['name']!==$role):?>
                             <div class="form-group" style="margin-bottom:0px;">
                                 <div class="mt-checkbox-inline" style="padding:2px 0;">
                                     <label class="mt-checkbox mt-checkbox-outline" style="margin-bottom:0px;">

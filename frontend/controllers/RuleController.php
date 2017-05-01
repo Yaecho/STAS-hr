@@ -36,12 +36,14 @@ class RuleController extends BaseController
     {
         if (Yii::$app->request->isPost) {
             $data = Yii::$app->request->post('param');
-            /* 创建角色 */
-            $rule = Yii::$app->authManager->createPermission($data['name']);
-            $rule->type = 2;
-            $rule->description = $data['description'];
-            if (Yii::$app->authManager->add($rule)) {
-                return $this->redirect(['rule/index']);
+
+            if ($data['name']!=='' and $data['description']!==''){
+                $rule = Yii::$app->authManager->createPermission($data['name']);
+                $rule->type = 2;
+                $rule->description = $data['description'];
+                if (Yii::$app->authManager->add($rule)) {
+                    return $this->redirect(['rule/index']);
+                }
             }
 
         }
@@ -54,11 +56,14 @@ class RuleController extends BaseController
         $ruleName = $rule->name;
 
         if (Yii::$app->request->isPost) {
+
             $data = Yii::$app->request->post('param');
-            $rule->name = $data['name'];
-            $rule->description = $data['description'];
-            if (Yii::$app->authManager-> update($ruleName,$rule)) {
-                return $this->redirect(['rule/index']);
+            if ($data['name']!=='' and $data['description']!=='') {
+                $rule->name = $data['name'];
+                $rule->description = $data['description'];
+                if (Yii::$app->authManager->update($ruleName, $rule)) {
+                    return $this->redirect(['rule/index']);
+                }
             }
 
         }

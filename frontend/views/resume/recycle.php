@@ -39,12 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'myself',
             // 'hope',
             [
-                'label'=> '简历创建时间',
                 'attribute' => 'created_time',
-                'format' => ['date', 'php:m-d h:i'],
-                //'filter'=>false,
+                'format' => ['date', 'php:m-d h:i']
             ],
-            //'created_time:datetime',
+            //'created_time',
             // 'hobbies',
             // 'sid',
             'is_send'=>[
@@ -66,7 +64,37 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             // 'not_recycling',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => '删除或恢复',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'template' => '{restore}{delete}',
+                'buttons' => [
+                    'restore' => function ($url, $model) {
+                        return Html::a('恢复 ', $url, [
+                            'title' => '恢复',
+                        ]);
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a(' 删除', $url, [
+                            'title' => '删除',
+                        ]);
+                    }
+
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action === 'restore') {
+                        $url = \yii\helpers\Url::toRoute(['resume/restore','id' => $model->id]);
+                        return $url;
+                    }
+                    if ($action === 'delete') {
+                        $url = \yii\helpers\Url::toRoute(['resume/true-delete','id' => $model->id]);
+                        return $url;
+                    }
+
+                }
+            ],
         ],
     ]); ?>
 </div>

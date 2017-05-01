@@ -2,33 +2,19 @@
 
 namespace frontend\controllers;
 
+use frontend\controllers\base\BaseController;
 use Yii;
 use common\models\UserModel;
 use common\models\UserSearch;
-use yii\web\Controller;
+//use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * UserController implements the CRUD actions for UserModel model.
  */
-class UserController extends Controller
+class UserController extends BaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all UserModel models.
      * @return mixed

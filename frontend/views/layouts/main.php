@@ -60,7 +60,9 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
-
+        <?php if (Yii::$app->user->isGuest) :?>
+            <?= $content ?>
+        <?php else:?>
         <div class="row">
             <div class="col-md-3">
                 <div class="list-group">
@@ -68,7 +70,7 @@ AppAsset::register($this);
                         用户管理
                     </a>
                     <a href="<?=Url::to(['resume/index'])?>" class="list-group-item">简历管理</a>
-                    <a href="#" class="list-group-item">简历回收站</a>
+                    <a href="<?=Url::to(['resume/recycle'])?>" class="list-group-item">简历回收站</a>
                     <a href="<?=Url::to(['auth/index'])?>" class="list-group-item">角色管理</a>
                     <a href="<?=Url::to(['rule/index'])?>" class="list-group-item">规则管理</a>
                     <a href="<?=Url::to(['user-role/index'])?>" class="list-group-item">用户授权</a>
@@ -78,13 +80,14 @@ AppAsset::register($this);
                 <?= $content ?>
             </div>
         </div>
+        <?php endif;?>
 
     </div>
 </div>
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; 南工学生科协 <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

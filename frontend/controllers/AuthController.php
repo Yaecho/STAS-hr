@@ -40,11 +40,13 @@ class AuthController extends BaseController
         if (Yii::$app->request->isPost) {
             $data = Yii::$app->request->post('param');
             /* 创建角色 */
-            $role = Yii::$app->authManager->createRole($data['name']);
-            $role->type = 1;
-            $role->description = $data['description'];
-            if (Yii::$app->authManager->add($role)) {
-                return $this->redirect(['auth/index']);
+            if ($data['name']!=='' and $data['description']!=='') {
+                $role = Yii::$app->authManager->createRole($data['name']);
+                $role->type = 1;
+                $role->description = $data['description'];
+                if (Yii::$app->authManager->add($role)) {
+                    return $this->redirect(['auth/index']);
+                }
             }
 
         }
@@ -67,10 +69,12 @@ class AuthController extends BaseController
 
         if (Yii::$app->request->isPost) {
             $data = Yii::$app->request->post('param');
-            $role->name = $data['name'];
-            $role->description = $data['description'];
-            if (Yii::$app->authManager-> update($item_name, $role)) {
-                return $this->redirect(['auth/index']);
+            if ($data['name']!=='' and $data['description']!=='') {
+                $role->name = $data['name'];
+                $role->description = $data['description'];
+                if (Yii::$app->authManager->update($item_name, $role)) {
+                    return $this->redirect(['auth/index']);
+                }
             }
 
         }

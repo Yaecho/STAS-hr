@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\controllers\base\BaseController;
 use phpDocumentor\Reflection\Types\Null_;
 use Yii;
 use common\models\ResumeModel;
@@ -13,36 +14,38 @@ use yii\filters\VerbFilter;
 /**
  * ResumeController implements the CRUD actions for ResumeModel model.
  */
-class ResumeController extends Controller
+class ResumeController extends BaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+    public $allResume = false;
 
-    public function beforeAction($action)
+    public function beforeAction($action,$other = Null)
     {
-        if (!parent::beforeAction($action)) {
-            return false;
+        $dangerAction = ['recycle','restore','true-delete'];
+        $act = Yii::$app->controller->action->id;
+        if(in_array($act,$dangerAction)){
+            $res = parent::beforeAction($action,Null);
+            if ($res === true){
+                $this->allResume = true;
+                return true;
+            }else{
+                throw new \yii\web\UnauthorizedHttpException('对不起，您现在还没获此操作的权限');
+            }
+        } else {
+            $res = parent::beforeAction($action,'[EditAllResume]');
         }
 
-        $controller = Yii::$app->controller->id;
-        $action = Yii::$app->controller->action->id;
-        $permissionName = $controller.'/'.$action;
-        if(!\Yii::$app->user->can($permissionName) && Yii::$app->getErrorHandler()->exception === null){
+        if ($res === false){
             throw new \yii\web\UnauthorizedHttpException('对不起，您现在还没获此操作的权限');
         }
-        return true;
+
+        if ($res === 'othersuccess') {
+            $this->allResume = true;
+            return true;
+        }
+
+        if ($res === true) {
+            return true;
+        }
     }
 
     /**
@@ -52,23 +55,12 @@ class ResumeController extends Controller
     public function actionIndex()
     {
         $searchModel = new ResumeSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Lists all ResumeModel models.
-     * @return mixed
-     */
-    public function actionOnlyMyResume()
-    {
-        $searchModel = new ResumeSearch();
         $queryParams = Yii::$app->request->queryParams;
-        $queryParams["ResumeSearch"]['first_wish'] = Yii::$app->user->identity->department;
+        if(!$this->allResume){
+            $queryParams["ResumeSearch"]['first_wish'] = Yii::$app->user->identity->department;
+            $queryParams["ResumeSearch"]['created_time'] = '';
+        }
+        $queryParams["ResumeSearch"]['not_recycling'] = '1';
         $dataProvider = $searchModel->search($queryParams);
 
         return $this->render('index', [
@@ -76,6 +68,7 @@ class ResumeController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
 
     /**
      * Displays a single ResumeModel model.
@@ -86,13 +79,6 @@ class ResumeController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-        ]);
-    }
-
-    public function actionOnlyMyView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id,Yii::$app->user->identity->department),
         ]);
     }
 
@@ -123,9 +109,42 @@ class ResumeController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->not_recycling = '0';
+        $model->save();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionRecycle()
+    {
+        $searchModel = new ResumeSearch();
+        $queryParams = Yii::$app->request->queryParams;
+        $queryParams["ResumeSearch"]['not_recycling'] = '0';
+        $dataProvider = $searchModel->search($queryParams);
+
+        return $this->render('recycle', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionRestore($id)
+    {
+
+        $model = $this->findModel($id,NULL,'0');
+        $model->not_recycling = '1';
+        $model->save();
+
+        return $this->redirect(['recycle']);
+    }
+
+    public function actionTrueDelete($id)
+    {
+        $model = $this->findModel($id,NULL,'0');
+        $model->delete();
+
+        return $this->redirect(['recycle']);
     }
 
     /**
@@ -136,12 +155,12 @@ class ResumeController extends Controller
      * @return ResumeModel the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id,$first_wish = NULL)
+    protected function findModel($id,$first_wish = NULL,$not_recycling = '1')
     {
-        if ($first_wish === NULL){
-            $condition = ['id' => $id];
+        if ($first_wish === NULL and $this->allResume){
+            $condition = ['id' => $id, 'not_recycling' => $not_recycling];
         }else{
-            $condition = ['id' => $id, 'first_wish' => $first_wish];
+            $condition = ['id' => $id, 'not_recycling' => $not_recycling, 'first_wish' => Yii::$app->user->identity->department];
         }
         if (($model = ResumeModel::findOne($condition)) !== null) {
             return $model;

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 $this->title = '编辑规则';
-$this->params['breadcrumbs'][] = ['label' => '角色管理','url' => ['auth/index']];;
+$this->params['breadcrumbs'][] = ['label' => '规则管理','url' => ['rule/index']];;
 $this->params['breadcrumbs'][] = '编辑规则';
 ?>
 
