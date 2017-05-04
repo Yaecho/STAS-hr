@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use common\models\SignTableModel;
 use Yii;
 use common\models\ResumeModel;
 use yii\base\Model;
@@ -168,5 +169,37 @@ class ResumeForm extends Model
 
         return true;
     }
+
+    public function signSave($id)
+    {
+        $model = new ResumeModel();
+        $data = $model::find()->where(['id'=>$id])->select('first_wish')->one()->toArray();
+        $signModel = new SignTableModel();
+        $signModel->rid = $id;
+        $signModel->department = $data['first_wish'];
+        $signModel->is_sign = 1;
+        $signModel->username = Yii::$app->user->identity->username;
+        $signModel->time = time();
+        return $signModel->save()?true:false;
+    }
+
+
+    public static function getList($cond, $curPage = 1,$pageSize = 5, $orderBy = ['id' => SORT_DESC])
+    {
+        $model = new ResumeModel();
+        //查询语句
+        $select = ['id', 'name', 'sex', 'phone','first_wish', 'second_wish', 'sid'];
+        $query = $model->find()
+            ->select($select)
+            ->where($cond)
+            ->with('sign')
+            ->orderBy($orderBy);
+        //获取分页数据
+        $res = $model->getPages($query, $curPage, $pageSize);
+
+        return $res;
+
+    }
+
 
 }

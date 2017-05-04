@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title>南工学生科协-<?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) ?>-南工学生科协</title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -29,8 +29,8 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '南工学生科协',
-        'brandUrl' => \yii\helpers\Url::to(['space/index']),
+        'brandLabel' => Html::encode($this->title) ,
+        'brandUrl' => \yii\helpers\Url::to(['index']),
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top navbar',
         ],
@@ -56,15 +56,9 @@ AppAsset::register($this);
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
         <?= Alert::widget() ?>
-        <?php if (Yii::$app->user->isGuest) :?>
-            <?= $content ?>
-        <?php else:?>
         <div class="row">
-            <div class="col-md-3">
+            <!--<div class="col-md-3">
                 <div class="list-group">
                     <a href="<?=Url::to(['user/index'])?>" class="list-group-item">用户管理</a>
                     <a href="<?=Url::to(['resume/index'])?>" class="list-group-item">简历管理</a>
@@ -76,12 +70,11 @@ AppAsset::register($this);
                     <a href="<?=Url::to(['rule/index'])?>" class="list-group-item">规则管理</a>
                     <a href="<?=Url::to(['user-role/index'])?>" class="list-group-item">用户授权</a>
                 </div>
-            </div>
-            <div class="col-md-9">
+            </div>-->
+            <div class="col-md-12">
                 <?= $content ?>
             </div>
         </div>
-        <?php endif;?>
 
     </div>
 </div>

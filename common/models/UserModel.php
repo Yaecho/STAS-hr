@@ -54,7 +54,8 @@ class UserModel extends BaseModel implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             [['username','truename','department', 'class', 'phone', 'qq', 'duty','birthday', 'appearance', 'dorm','role',
-                'status',],'required']
+                'status',],'required'],
+            [['username'], 'unique'],
         ];
     }
 
