@@ -40,8 +40,8 @@ class RoomAssignmentModel extends \common\models\base\BaseModel
     {
         return [
             'id' => 'ID',
-            'department' => 'Department',
-            'classroom' => 'Classroom',
+            'department' => '部门名称',
+            'classroom' => '安排教室',
         ];
     }
 }

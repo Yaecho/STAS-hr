@@ -58,19 +58,6 @@ AppAsset::register($this);
     <div class="container">
         <?= Alert::widget() ?>
         <div class="row">
-            <!--<div class="col-md-3">
-                <div class="list-group">
-                    <a href="<?=Url::to(['user/index'])?>" class="list-group-item">用户管理</a>
-                    <a href="<?=Url::to(['resume/index'])?>" class="list-group-item">简历管理</a>
-                    <a href="<?=Url::to(['resume/recycle'])?>" class="list-group-item">简历回收站</a>
-                    <a href="<?=Url::to(['sms/index'])?>" class="list-group-item">短信发送</a>
-                    <a href="<?=Url::to(['guide/index'])?>" target="_blank" class="list-group-item">签到人员入口</a>
-                    <a href="<?=Url::to(['interviewer/index'])?>" target="_blank" class="list-group-item">面试人员入口</a>
-                    <a href="<?=Url::to(['auth/index'])?>" class="list-group-item">角色管理</a>
-                    <a href="<?=Url::to(['rule/index'])?>" class="list-group-item">规则管理</a>
-                    <a href="<?=Url::to(['user-role/index'])?>" class="list-group-item">用户授权</a>
-                </div>
-            </div>-->
             <div class="col-md-12">
                 <?= $content ?>
             </div>

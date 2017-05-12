@@ -180,7 +180,7 @@ class ResumeForm extends Model
         $signModel->is_sign = 1;
         $signModel->username = Yii::$app->user->identity->username;
         $signModel->time = time();
-        return $signModel->save()?true:false;
+        return $signModel->save()?$signModel->time:false;
     }
 
 

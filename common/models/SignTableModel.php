@@ -34,7 +34,13 @@ class SignTableModel extends \common\models\base\BaseModel
             [['rid', 'is_sign', 'time'], 'integer'],
             [['department'], 'string', 'max' => 25],
             [['username'], 'string', 'max' => 50],
+            [['rid'], 'unique'],
         ];
+    }
+
+    public function getResume()
+    {
+        return $this->hasOne(ResumeModel::className(), ['id'=>'rid']); //一对多关系
     }
 
     /**

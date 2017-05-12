@@ -70,6 +70,7 @@ AppAsset::register($this);
                     <a href="<?=Url::to(['resume/index'])?>" class="list-group-item">简历管理</a>
                     <a href="<?=Url::to(['resume/recycle'])?>" class="list-group-item">简历回收站</a>
                     <a href="<?=Url::to(['sms/index'])?>" class="list-group-item">短信发送</a>
+                    <a href="<?=Url::to(['room-assignment/index'])?>" class="list-group-item">面试教室</a>
                     <a href="<?=Url::to(['guide/index'])?>" target="_blank" class="list-group-item">签到人员入口</a>
                     <a href="<?=Url::to(['interviewer/index'])?>" target="_blank" class="list-group-item">面试人员入口</a>
                     <a href="<?=Url::to(['auth/index'])?>" class="list-group-item">角色管理</a>
