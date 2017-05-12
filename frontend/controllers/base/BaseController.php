@@ -33,7 +33,7 @@ class BaseController extends Controller
 
 
         $permissionName = $controller.'/'.$action;
-        $permissionCan = \Yii::$app->user->can($permissionName);
+        $permissionCan = (\Yii::$app->user->can($permissionName) or \Yii::$app->user->can(($controller.'/*')));
 
         if ($other !== Null){
            if ($permissionCan and \Yii::$app->user->can($other))

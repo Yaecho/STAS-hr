@@ -8,6 +8,9 @@ AppAsset::addScript($this,'@web/statics/jquery-bar-rating/dist/jquery.barrating.
 AppAsset::addCss($this,'@web/statics/jquery-bar-rating/dist/themes/fontawesome-stars.css');
 ?>
 <div style="margin-right: auto; margin-left: auto;max-width:750px;">
+    <?php if($data['first_wish'] !== $data['sign']['department']):?>
+        <div class="alert alert-success" role="alert">由 <?=$data['first_wish']?> 推送至 <?=$data['sign']['department']?></div>
+    <?php endif;?>
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -136,7 +139,7 @@ AppAsset::addCss($this,'@web/statics/jquery-bar-rating/dist/themes/fontawesome-s
             <label>将简历推送至</label>
             <select name="department" class="form-control">
                 <?php foreach ($department as $v):?>
-                    <?php if($v !== $data['first_wish']):?>
+                    <?php if($v !== $data['sign']['department']):?>
                         <option value="<?=$v?>"><?=$v?></option>
                     <?php endif;?>
                 <?php endforeach;?>
@@ -157,12 +160,13 @@ AppAsset::addCss($this,'@web/statics/jquery-bar-rating/dist/themes/fontawesome-s
                 技术：<?=$v['star_1']?>分 表达：<?=$v['star_2']?>分 感觉：<?=$v['star_3']?>分 颜值：<?=$v['star_4']?>分 态度：<?=$v['star_5']?>分
               </p>
               <p>
-                评价：<?=$v['content']?>
+                评价：<?=strip_tags($v['content'])?>
               </p>
               <P>
                 发表时间：<?=date('m-d H:i',$v['time'])?>
               </P>
             </div>
+            <br>
         <?php endforeach;?>
     <?php endif;?>
 </div>
