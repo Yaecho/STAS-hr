@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            //'id',
             'sid',
             'name',
             'sex'=>[
@@ -62,8 +62,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     return ($model->res == 1)?'已确认':'未确认';
                 },
-                'filter' => ['1'=>'已确认','0'=>'未确认']
             ],
+            //'sign.is_sign',
+            /*[
+                'attribute' => 'is_sign',
+                'value' => 'sign.is_sign',
+                'label' => '签到',
+            ],*/
+            /*[
+                'attribute' => 'iid',
+                'value' => 'hire.iid',
+                'label' => '录用',
+            ],*/
+            //'hire.iname',
             // 'not_recycling',
 
             ['class' => 'yii\grid\ActionColumn'],

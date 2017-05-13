@@ -15,11 +15,15 @@ class ResumeSearch extends ResumeModel
     /**
      * @inheritdoc
      */
+    //public $is_sign;
+    //public $iname;
+
     public function rules()
     {
         return [
             [['id', 'created_time', 'is_send', 'res', 'not_recycling'], 'integer'],
             [['name', 'sex', 'birthday', 'place', 'identity', 'college', 'class', 'dorm', 'phone', 'qq', 'first_wish', 'second_wish', 'myself', 'hope', 'hobbies', 'sid', 'code'], 'safe'],
+            //[['is_sign', 'iname'],'safe'],
         ];
     }
 
@@ -43,6 +47,9 @@ class ResumeSearch extends ResumeModel
     {
         $query = ResumeModel::find();
 
+        //$query->joinWith(['sign','hire']);
+        //$query->select("sign_table.*, hire.*, resume.*");
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -64,6 +71,8 @@ class ResumeSearch extends ResumeModel
             'is_send' => $this->is_send,
             'res' => $this->res,
             'not_recycling' => $this->not_recycling,
+            //'sign_table.is_sign' => $this->is_sign,
+            //'hire.iname' => $this->iname,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
