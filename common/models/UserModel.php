@@ -189,4 +189,35 @@ class UserModel extends BaseModel implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /**
+     *
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id'=>'ID',
+            'username'=>'登录名',
+            'truename'=>'姓名',
+            'department'=>'部门',
+            'class'=>'班级',
+            'phone'=>'手机号码',
+            'qq'=>'QQ号',
+            'duty'=>'职务',
+            'birthday'=>'出生年月',
+            'appearance'=>'政治面貌',
+            'dorm'=>'宿舍区',
+            // 'auth_key',
+            // 'password_hash',
+            // 'password_reset_token',
+            // 'email_validate_token:email',
+            'email'=>'邮箱',
+            //'role',
+            'status' => '状态',
+            'avatar'=>'头像',
+            'vip_lv'=>'等级',
+            'created_at'=>'创建时间',
+            'updated_at'=>'更新时间',
+        ];
+    }
 }

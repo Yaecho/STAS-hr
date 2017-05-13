@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\ResumeModel */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Resume Models', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '简历管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="resume-model-view">

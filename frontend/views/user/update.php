@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\UserModel */
 
-$this->title = 'Update User Model: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'User Models', 'url' => ['index']];
+$this->title = '更新用户: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => '用户管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

@@ -8,9 +8,17 @@ AppAsset::addScript($this,'@web/statics/jquery-bar-rating/dist/jquery.barrating.
 AppAsset::addCss($this,'@web/statics/jquery-bar-rating/dist/themes/fontawesome-stars.css');
 ?>
 <div style="margin-right: auto; margin-left: auto;max-width:750px;">
+    <?php if(!empty($data['hire'])):?>
+        <?php $hireAction = 'delete';$hireButton = '取消录用'; ?>
+        <div class="alert alert-success" role="alert">由 <?=$data['hire']['iname']?> 标记为录用</div>
+    <?php else:?>
+        <?php $hireAction = 'save';$hireButton = '标记录用'; ?>
+    <?php endif;?>
+
     <?php if($data['first_wish'] !== $data['sign']['department']):?>
         <div class="alert alert-success" role="alert">由 <?=$data['first_wish']?> 推送至 <?=$data['sign']['department']?></div>
     <?php endif;?>
+
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -132,21 +140,33 @@ AppAsset::addCss($this,'@web/statics/jquery-bar-rating/dist/themes/fontawesome-s
       </form>
     </div>
     <hr />
-    <form class="form-inline" action="<?=\yii\helpers\Url::to(['transfer'])?>" method="post">
-        <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
-        <input type="hidden" name="rid" value="<?=$data['id']?>"/>
-        <div class="form-group">
-            <label>将简历推送至</label>
-            <select name="department" class="form-control">
-                <?php foreach ($department as $v):?>
-                    <?php if($v !== $data['sign']['department']):?>
-                        <option value="<?=$v?>"><?=$v?></option>
-                    <?php endif;?>
-                <?php endforeach;?>
-            </select>
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline" action="<?=\yii\helpers\Url::to(['transfer'])?>" method="post">
+                <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
+                <input type="hidden" name="rid" value="<?=$data['id']?>"/>
+                <div class="form-group">
+                    <label>将简历推送至</label>
+                    <select name="department" class="form-control">
+                        <?php foreach ($department as $v):?>
+                            <?php if($v !== $data['sign']['department']):?>
+                                <option value="<?=$v?>"><?=$v?></option>
+                            <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default">发送</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-default">发送</button>
-    </form>
+        <div class="col-md-6" style="text-align: right;">
+            <form action="<?=\yii\helpers\Url::to(['hire'])?>" method="post">
+                <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
+                <input type="hidden" name="rid" value="<?=$data['id']?>"/>
+                <input type="hidden" name="hireAction" value="<?=$hireAction?>"/>
+                <button class="btn btn-default" type="submit"><?=$hireButton?></button>
+            </form>
+        </div>
+    </div>
     <hr />
     <?php if(empty($reviews)):?>
         <p>暂无评价</p>

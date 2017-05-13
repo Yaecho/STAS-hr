@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\ResumeModel */
 
-$this->title = 'Update Resume Model: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Resume Models', 'url' => ['index']];
+$this->title = '更新简历: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => '简历管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

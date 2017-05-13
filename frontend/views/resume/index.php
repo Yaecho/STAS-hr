@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\ResumeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Resume Models';
+$this->title = '简历管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="resume-model-index">
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label'=> '简历创建时间',
                 'attribute' => 'created_time',
-                'format' => ['date', 'php:m-d h:i'],
+                'format' => ['date', 'php:m-d H:i'],
                 //'filter'=>false,
             ],
             //'created_time:datetime',

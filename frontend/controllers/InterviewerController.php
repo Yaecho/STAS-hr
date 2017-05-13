@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\HireModel;
 use common\models\ResumeModel;
 use common\models\ReviewModel;
 use common\models\SignTableModel;
@@ -92,7 +93,7 @@ class InterviewerController extends BaseController
         $model = new ResumeModel();
         $rModel = new ReviewModel();
         $reviews = $rModel::find()->where(['rid'=>$id])->asArray()->all();
-        $res = $model::find()->where(['id'=>$id])->with('sign')->asArray()->one();
+        $res = $model::find()->where(['id'=>$id])->with('sign','hire')->asArray()->one();
         return $this->render('detail',['data'=>$res,'reviews'=>$reviews,'department'=>\Yii::$app->params['department']]);
     }
 
@@ -138,6 +139,45 @@ class InterviewerController extends BaseController
         }
         Yii::$app->getSession()->setFlash('error', "简历推送失败！");
         return $this->redirect(['index']);
+    }
+
+    public function actionHire()
+    {
+        $hireAction = Yii::$app->request->post('hireAction');
+        $rid = Yii::$app->request->post('rid');
+        if(!$this->queryCheck($rid)){
+            return $this->redirect(['index']);
+        }
+
+        $model = new HireModel();
+
+        if($hireAction === 'save') {
+            $model->rid = $rid;
+            $model->iid = Yii::$app->user->identity->getId();
+            $model->iname = $this->department . '-' . Yii::$app->user->identity->truename;
+            $model->time = time();
+            if ($model->save()) {
+                Yii::$app->getSession()->setFlash('success', "标记录用成功！");
+            } else {
+                Yii::$app->getSession()->setFlash('error', "标记录用失败！");
+            }
+        }elseif($hireAction === 'delete'){
+            $res = $model::findOne(['rid'=>$rid]);
+            $userId = Yii::$app->user->getId();
+
+            if($userId !== 1 and $res->iid !== $userId){
+                Yii::$app->getSession()->setFlash('error', "请使用超管帐号或标记本简历的帐号取消录用！");
+            }else{
+                if($res->delete()){
+                    Yii::$app->getSession()->setFlash('success', "取消录用成功！");
+                }else{
+                    Yii::$app->getSession()->setFlash('error', "取消录用失败！");
+                }
+            }
+        }
+
+        return $this->redirect(['detail','id'=>$rid]);
+
     }
 
     private function queryCheck($rid){

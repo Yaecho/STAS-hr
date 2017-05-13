@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel common\models\ResumeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Resume Models';
+$this->title = '简历回收站';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="resume-model-index">

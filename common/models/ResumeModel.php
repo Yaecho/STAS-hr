@@ -45,7 +45,12 @@ class ResumeModel extends \common\models\base\BaseModel
      */
     public function getSign()
     {
-        return $this->hasOne(SignTableModel::className(), ['rid'=>'id']); //一对多关系
+        return $this->hasOne(SignTableModel::className(), ['rid'=>'id']); //一对一关系
+    }
+
+    public function getHire()
+    {
+        return $this->hasOne(HireModel::className(), ['rid'=>'id']); //一对一关系
     }
 
     /**
