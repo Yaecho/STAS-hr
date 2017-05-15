@@ -2,7 +2,6 @@
 namespace frontend\controllers\base;
 
 use Yii;
-use yii\helpers\Url;
 use yii\web\Controller;
 
 class BaseController extends Controller
@@ -46,5 +45,15 @@ class BaseController extends Controller
             throw new \yii\web\UnauthorizedHttpException('对不起，您现在还没获此操作的权限');
         }
         return true;
+    }
+
+    public function success($info)
+    {
+        Yii::$app->getSession()->setFlash('success',$info);
+    }
+
+    public function error($info)
+    {
+        Yii::$app->getSession()->setFlash('error',$info);
     }
 }

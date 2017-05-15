@@ -7,7 +7,6 @@ use common\models\ReviewModel;
 use common\models\SignTableModel;
 use frontend\models\ResumeForm;
 use frontend\models\ReviewForm;
-use frontend\models\SignTableForm;
 use Yii;
 use frontend\controllers\base\BaseController;
 use yii\data\Pagination;
@@ -16,67 +15,26 @@ class InterviewerController extends BaseController
 {
     public $layout = 'gandi.php';
 
-    public $allResume = false;
-
-    protected $department;
-
-    public function beforeAction($action,$other = Null)
-    {
-        $this->department = Yii::$app->user->identity->department;
-
-        $res = parent::beforeAction($action,'[EditAllResume]');
-
-        if ($res === false){
-            throw new \yii\web\UnauthorizedHttpException('对不起，您现在还没获此操作的权限');
-        }
-
-        if ($res === 'othersuccess') {
-            $this->allResume = true;
-            return true;
-        }
-
-        if ($res === true) {
-            return true;
-        }
-    }
-
     public function actionIndex()
     {
         $search = Yii::$app->request->post('Search',['name'=>'','sid'=>'','signId'=>'']);
-
         $curPage = Yii::$app->request->get('page',1);
+
         //查询条件
-        if(!$this->allResume) {
-            $cond = ['department' => $this->department];
-        }else{
-            $cond = '';
+        $cond = ['sign_table.is_sign'=>'1'];
+
+        if($search['name'] !=='' or $search['sid'] !== '' or $search['signId'] !== ''){
+            $cond = ['and', $cond,
+                [
+                    'or',
+                    ['resume.name' => [$search['name']]],
+                    ['resume.sid' => [$search['sid']]],
+                    ['sign_table.id' => [$search['signId']]],
+                ],
+            ];
         }
 
-        if($search['name'] !=='' or $search['sid'] !== ''){
-            if(!$this->allResume) {
-                $cond = ['and', ['first_wish' => $$this->department], ['or', ['name' => [$search['name']]], ['sid' => [$search['sid']]]]];
-            }else{
-                $cond = ['or', ['name' => [$search['name']]], ['sid' => [$search['sid']]]];
-            }
-            $res = ResumeForm::getlist($cond,$curPage,10);
-            $data = [];
-            foreach ($res['data'] as $k1=>$v1){
-                $data[$k1]['id'] = $v1['sign']['id'];
-                $data[$k1]['time'] = $v1['sign']['time'];
-                foreach ($v1 as $k2=>$v2){
-                    $data[$k1]['resume'][$k2] = $v2;
-                }
-            }
-            unset($res['data']);
-            $res['data'] = $data;
-            //var_dump($res);
-            //die();
-        }else{
-            if ($search['signId'] !== ''){
-                $cond = array_merge($cond , ['id' => $search['signId']]);
-            }
-            $res = SignTableForm::getlist($cond,$curPage,10);
-        }
+        $res = ResumeForm::getlist($cond,$curPage,10, ['sign_table.id' => SORT_DESC]);
 
         $pages = new Pagination(['totalCount'=>$res['count'], 'pageSize' => $res['pageSize']]);
         $res['page'] = $pages;
@@ -84,19 +42,31 @@ class InterviewerController extends BaseController
         return $this->render('index', ['data'=>$res,'search'=>$search]);
     }
 
+    /*
+     * 简历详情
+     */
     public function actionDetail($id)
     {
         if(!$this->queryCheck($id)){
             return $this->redirect(['index']);
         }
 
-        $model = new ResumeModel();
         $rModel = new ReviewModel();
         $reviews = $rModel::find()->where(['rid'=>$id])->asArray()->all();
-        $res = $model::find()->where(['id'=>$id])->with('sign','hire')->asArray()->one();
-        return $this->render('detail',['data'=>$res,'reviews'=>$reviews,'department'=>\Yii::$app->params['department']]);
+
+        $res = ResumeModel::find()->where(['id'=>$id, 'not_recycling' => '1'])->with('sign','hire')->asArray()->one();
+
+        if(!$res){
+            $this->error('没有权限查看此简历！');
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('detail',['data'=>$res,'reviews'=>$reviews,]);
     }
 
+    /*
+     * 评价
+     */
     public function actionReview()
     {
         $model = new ReviewForm();
@@ -108,9 +78,9 @@ class InterviewerController extends BaseController
             }
 
             if ($model->validate() and $model->create()) {
-                Yii::$app->getSession()->setFlash('success', "评价提交成功！");
+                $this->success('评价提交成功！');
             }else{
-                Yii::$app->getSession()->setFlash('error', "评价提交失败！");
+                $this->error('评价提交失败！');
             }
         }
 
@@ -118,9 +88,11 @@ class InterviewerController extends BaseController
 
     }
 
+    /*
+     * 推送简历
+     */
     public function actionTransfer()
     {
-        $model = new SignTableModel();
         $rid = Yii::$app->request->post('rid');
         $department = Yii::$app->request->post('department');
 
@@ -128,23 +100,28 @@ class InterviewerController extends BaseController
             return $this->redirect(['index']);
         }
 
+        $model = new SignTableModel();
         $res = $model::findOne(['rid'=>$rid]);
 
         if ($res){
             $res->department = $department;
             if($res->save()){
-                Yii::$app->getSession()->setFlash('success', "简历推送成功！");
+                $this->success('简历推送成功！');
                 return $this->redirect(['index']);
             }
         }
-        Yii::$app->getSession()->setFlash('error', "简历推送失败！");
+        $this->error('简历推送失败！');
         return $this->redirect(['index']);
     }
 
+    /*
+     * 标记录用
+     */
     public function actionHire()
     {
         $hireAction = Yii::$app->request->post('hireAction');
         $rid = Yii::$app->request->post('rid');
+
         if(!$this->queryCheck($rid)){
             return $this->redirect(['index']);
         }
@@ -154,24 +131,26 @@ class InterviewerController extends BaseController
         if($hireAction === 'save') {
             $model->rid = $rid;
             $model->iid = Yii::$app->user->identity->getId();
-            $model->iname = $this->department . '-' . Yii::$app->user->identity->truename;
+            $model->iname = Yii::$app->user->identity->department . '-' . Yii::$app->user->identity->truename;
             $model->time = time();
             if ($model->save()) {
-                Yii::$app->getSession()->setFlash('success', "标记录用成功！");
+                $this->success('标记录用成功！');
             } else {
-                Yii::$app->getSession()->setFlash('error', "标记录用失败！");
+                $this->error('标记录用失败！');
             }
-        }elseif($hireAction === 'delete'){
+        }
+
+        if($hireAction === 'delete'){
             $res = $model::findOne(['rid'=>$rid]);
             $userId = Yii::$app->user->getId();
 
             if($userId !== 1 and $res->iid !== $userId){
-                Yii::$app->getSession()->setFlash('error', "请使用超管帐号或标记本简历的帐号取消录用！");
+                $this->error('请使用超管帐号或标记本简历的帐号取消录用！');
             }else{
                 if($res->delete()){
-                    Yii::$app->getSession()->setFlash('success', "取消录用成功！");
+                    $this->success('取消录用成功！');
                 }else{
-                    Yii::$app->getSession()->setFlash('error', "取消录用失败！");
+                    $this->error('取消录用失败！');
                 }
             }
         }
@@ -181,14 +160,13 @@ class InterviewerController extends BaseController
     }
 
     private function queryCheck($rid){
-        if(!$this->allResume) {
-            $signData = SignTableModel::findOne(['rid'=>$rid]);
-            if(empty($signData->department) or $this->department !== $signData->department){
-                Yii::$app->getSession()->setFlash('error', "没有权限查看编辑此简历！");
+        if (!Yii::$app->user->can('[EditAllResume]')) {
+            $signData = SignTableModel::findOne(['rid' => $rid]);
+            if (empty($signData->department) or Yii::$app->user->identity->department !== $signData->department) {
+                $this->error('没有权限查看编辑此简历！');
                 return false;
             }
         }
-
         return true;
     }
 }

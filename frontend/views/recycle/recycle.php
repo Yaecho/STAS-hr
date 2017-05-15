@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'hope',
             [
                 'attribute' => 'created_time',
-                'format' => ['date', 'php:m-d h:i']
+                'format' => ['date', 'php:m-d H:i']
             ],
             //'created_time',
             // 'hobbies',
@@ -85,11 +85,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'restore') {
-                        $url = \yii\helpers\Url::toRoute(['resume/restore','id' => $model->id]);
+                        $url = \yii\helpers\Url::toRoute(['recycle/restore','id' => $model->id]);
                         return $url;
                     }
                     if ($action === 'delete') {
-                        $url = \yii\helpers\Url::toRoute(['resume/true-delete','id' => $model->id]);
+                        $url = \yii\helpers\Url::toRoute(['recycle/true-delete','id' => $model->id]);
                         return $url;
                     }
 

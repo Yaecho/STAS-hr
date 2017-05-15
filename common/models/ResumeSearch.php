@@ -49,8 +49,11 @@ class ResumeSearch extends ResumeModel
 
         //$query->joinWith(['sign','hire']);
         //$query->select("sign_table.*, hire.*, resume.*");
+        if (!Yii::$app->user->can('[EditAllResume]')){
+            $query = $query->where(['first_wish'=>Yii::$app->user->identity->department]);
+        }
 
-        // add conditions that should always apply here
+            // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

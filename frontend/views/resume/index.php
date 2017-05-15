@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     return ($model->is_send == 1)?'已发送':'未发送';
                 },
-                'filter' => ['1'=>'已发送','0'=>'未发送']
+                'filter' => ['1'=>'已发送','0'=>'未发送'],
             ],
             // 'code',
             'res'=>[
@@ -62,6 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     return ($model->res == 1)?'已确认':'未确认';
                 },
+                'filter' => ['1'=>'已确认','0'=>'未确认'],
             ],
             //'sign.is_sign',
             /*[

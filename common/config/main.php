@@ -1,7 +1,7 @@
 <?php
 return [
     'language' => 'zh-CN',
-    'timeZone' => 'Asia/shanghai',
+    //'timeZone' => 'Asia/shanghai',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [

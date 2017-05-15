@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use frontend\controllers\base\BaseController;
+use frontend\models\ResumeForm;
 use phpDocumentor\Reflection\Types\Null_;
 use Yii;
 use common\models\ResumeModel;
@@ -16,38 +17,6 @@ use yii\filters\VerbFilter;
  */
 class ResumeController extends BaseController
 {
-    public $allResume = false;
-
-    public function beforeAction($action,$other = Null)
-    {
-        $dangerAction = ['recycle','restore','true-delete'];
-        $act = Yii::$app->controller->action->id;
-        if(in_array($act,$dangerAction)){
-            $res = parent::beforeAction($action,Null);
-            if ($res === true){
-                $this->allResume = true;
-                return true;
-            }else{
-                throw new \yii\web\UnauthorizedHttpException('对不起，您现在还没获此操作的权限');
-            }
-        } else {
-            $res = parent::beforeAction($action,'[EditAllResume]');
-        }
-
-        if ($res === false){
-            throw new \yii\web\UnauthorizedHttpException('对不起，您现在还没获此操作的权限');
-        }
-
-        if ($res === 'othersuccess') {
-            $this->allResume = true;
-            return true;
-        }
-
-        if ($res === true) {
-            return true;
-        }
-    }
-
     /**
      * Lists all ResumeModel models.
      * @return mixed
@@ -56,10 +25,7 @@ class ResumeController extends BaseController
     {
         $searchModel = new ResumeSearch();
         $queryParams = Yii::$app->request->queryParams;
-        if(!$this->allResume){
-            $queryParams["ResumeSearch"]['first_wish'] = Yii::$app->user->identity->department;
-            $queryParams["ResumeSearch"]['created_time'] = '';
-        }
+
         $queryParams["ResumeSearch"]['not_recycling'] = '1';
         $dataProvider = $searchModel->search($queryParams);
 
@@ -78,7 +44,7 @@ class ResumeController extends BaseController
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => ResumeForm::findModelById($id),
         ]);
     }
 
@@ -90,7 +56,7 @@ class ResumeController extends BaseController
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = ResumeForm::findModelById($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -109,63 +75,15 @@ class ResumeController extends BaseController
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
+        $model = ResumeForm::findModelById($id);
         $model->not_recycling = '0';
-        $model->save();
+        if($model->save()){
+            $this->success('移至回收站成功');
+        }else{
+            $this->error('移至回收站失败');
+        }
 
         return $this->redirect(['index']);
     }
 
-    public function actionRecycle()
-    {
-        $searchModel = new ResumeSearch();
-        $queryParams = Yii::$app->request->queryParams;
-        $queryParams["ResumeSearch"]['not_recycling'] = '0';
-        $dataProvider = $searchModel->search($queryParams);
-
-        return $this->render('recycle', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    public function actionRestore($id)
-    {
-
-        $model = $this->findModel($id,NULL,'0');
-        $model->not_recycling = '1';
-        $model->save();
-
-        return $this->redirect(['recycle']);
-    }
-
-    public function actionTrueDelete($id)
-    {
-        $model = $this->findModel($id,NULL,'0');
-        $model->delete();
-
-        return $this->redirect(['recycle']);
-    }
-
-    /**
-     * Finds the ResumeModel model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @param string $first_wish
-     * @return ResumeModel the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id,$first_wish = NULL,$not_recycling = '1')
-    {
-        if ($first_wish === NULL and $this->allResume){
-            $condition = ['id' => $id, 'not_recycling' => $not_recycling];
-        }else{
-            $condition = ['id' => $id, 'not_recycling' => $not_recycling, 'first_wish' => Yii::$app->user->identity->department];
-        }
-        if (($model = ResumeModel::findOne($condition)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 }

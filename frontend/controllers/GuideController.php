@@ -18,12 +18,11 @@ class GuideController extends BaseController
         $search['name'] = Yii::$app->request->post('name','');
         $search['sid'] = Yii::$app->request->post('sid','');
         $curPage = Yii::$app->request->get('page',1);
-        //查询条件
         $cond = [];
         if($search['name'] !=='' or $search['sid'] !== ''){
             $cond = ['or', ['name' => [$search['name']]], ['sid' => [$search['sid']]]];
         }
-        $res = ResumeForm::getlist($cond,$curPage,10);
+        $res = ResumeForm::getlist($cond,$curPage,10, ['resume.id' => SORT_DESC], true);
 
         $pages = new Pagination(['totalCount'=>$res['count'], 'pageSize' => $res['pageSize']]);
         $res['page'] = $pages;
@@ -36,7 +35,7 @@ class GuideController extends BaseController
         $model = new ResumeForm();
         $data = $model->signSave($id);
         if($data !== false){
-            return date('m-d h:i',$data);
+            return date('m-d H:i',$data);
         }else{
             return 'fail';
         }

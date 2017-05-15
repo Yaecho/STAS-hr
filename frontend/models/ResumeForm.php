@@ -1,6 +1,8 @@
 <?php
 namespace frontend\models;
 
+use common\models\HireModel;
+use common\models\ReviewModel;
 use common\models\SignTableModel;
 use Yii;
 use common\models\ResumeModel;
@@ -46,6 +48,7 @@ class ResumeForm extends Model
      */
     const EVENT_AFTER_CREATE = 'eventAfterCreate';
     const EVENT_AFTER_UPDATE = 'eventAfterUpdate';
+    const EVENT_AFTER_DETELE = 'eventAfterDetele';
 
     public function rules()
     {
@@ -155,6 +158,9 @@ class ResumeForm extends Model
 
     }
 
+    /*
+     * 短信确认码检查
+     */
     public function codeCheck()
     {
         $code = $this->code;
@@ -170,35 +176,135 @@ class ResumeForm extends Model
         return true;
     }
 
+    /*
+     * 将签到数据写入sign_table
+     */
     public function signSave($id)
     {
         $model = new ResumeModel();
-        $data = $model::find()->where(['id'=>$id])->select('first_wish')->one()->toArray();
-        $signModel = new SignTableModel();
-        $signModel->rid = $id;
-        $signModel->department = $data['first_wish'];
-        $signModel->is_sign = 1;
-        $signModel->username = Yii::$app->user->identity->username;
-        $signModel->time = time();
-        return $signModel->save()?$signModel->time:false;
+        $data = $model::find()->where(['not_recycling'=>'1','id'=>$id])->select('first_wish')->one()->toArray();
+        if($data) {
+            $signModel = new SignTableModel();
+            $signModel->rid = $id;
+            $signModel->department = $data['first_wish'];
+            $signModel->is_sign = 1;
+            $signModel->username = Yii::$app->user->identity->username;
+            $signModel->time = time();
+            return $signModel->save() ? $signModel->time : false;
+        }else{
+            return false;
+        }
+    }
+
+    /*
+     * 删除简历及关联表
+     */
+    public function trueDetele($id)
+    {
+        //事务
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            $model = self::findModelById($id,'0');
+
+            if(!$model->delete()){
+                throw new \Exception('简历删除失败！');
+            }
+
+            $this->_eventAfterTrueDetele($id);
+
+            $transaction->commit();
+            return true;
+        }catch (\Exception $e){
+            $transaction->rollBack();
+            $this->_lastError =$e->getMessage();
+            return false;
+        }
+    }
+
+    public function _eventAfterTrueDetele($id)
+    {
+        $this->on(self::EVENT_AFTER_DETELE,[$this,'_eventRemoveRelation'],$id);//添加事件
+        //off取消
+        $this->trigger(self::EVENT_AFTER_DETELE);//触发事件
+    }
+
+    /*
+     * 移除关联表
+     */
+    public function _eventRemoveRelation($event)
+    {
+        $id = $event->data;
+
+        if(SignTableModel::findAll(['rid'=>$id])){
+            $signs = SignTableModel::deleteAll(['rid'=>$id]);
+        }else{
+            $signs = true;
+        }
+
+        if(ReviewModel::findAll(['rid'=>$id])){
+            $reviews = ReviewModel::deleteAll(['rid'=>$id]);
+        }else{
+            $reviews = true;
+        }
+
+        if(HireModel::findAll(['rid'=>$id])){
+            $hires = HireModel::deleteAll(['rid'=>$id]);
+        }else{
+            $hires = true;
+        }
+
+        $result = ($signs and $reviews and $hires);
+        if (!$result)
+            throw new \Exception('移除关联表失败!');
+
     }
 
 
-    public static function getList($cond, $curPage = 1,$pageSize = 5, $orderBy = ['id' => SORT_DESC])
+    /*
+     * 获得简历列表
+     */
+    public static function getList($cond, $curPage = 1,$pageSize = 5, $orderBy = ['resume.id' => SORT_DESC], $isGuide = false)
     {
         $model = new ResumeModel();
         //查询语句
-        $select = ['id', 'name', 'sex', 'phone','first_wish', 'second_wish', 'sid'];
+        if (Yii::$app->user->can('[EditAllResume]') or $isGuide){
+            $cond = ['and', ['not_recycling'=>'1'], $cond];
+        }else{
+            $cond = ['and', ['not_recycling'=>'1', 'first_wish' => Yii::$app->user->identity->department], $cond];
+        }
+        $select = 'resume.id,resume.name,resume.sex,resume.phone,resume.first_wish,resume.second_wish,resume.sid';
+
         $query = $model->find()
+            ->joinWith(['sign'])
+            //->select("sign_table.*, hire.*, resume.*");
             ->select($select)
             ->where($cond)
-            ->with('sign')
+            //->with('sign')
             ->orderBy($orderBy);
         //获取分页数据
         $res = $model->getPages($query, $curPage, $pageSize);
 
         return $res;
 
+    }
+
+    /*
+     * 通过id查找单个简历
+     * id
+     * not_recycling
+     */
+    public static function findModelById($id,$not_recycling = '1')
+    {
+
+        if (Yii::$app->user->can('[EditAllResume]')){
+            $condition = ['id' => $id, 'not_recycling' => $not_recycling];
+        }else{
+            $condition = ['id' => $id, 'not_recycling' => $not_recycling, 'first_wish' => Yii::$app->user->identity->department];
+        }
+
+        $model = ResumeModel::findOne($condition);
+
+        return $model;
     }
 
 

@@ -1,5 +1,7 @@
 <?php
 
+use yii\helpers\Html;
+
 $this->title = '面试';
 ?>
 <div style="margin-bottom: 10px;">
@@ -7,15 +9,15 @@ $this->title = '面试';
         <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
         <div class="form-group">
             <label class="" for="signId">签到号</label>
-            <input type="number" class="form-control" name="Search[signId]" value="<?=$search['signId']?>" id="signId" placeholder="签到号">
+            <input type="number" class="form-control" name="Search[signId]" value="<?=Html::encode($search['signId'])?>" id="signId" placeholder="签到号">
         </div>
         <div class="form-group">
             <label class="" for="name">OR 姓名</label>
-            <input type="text" class="form-control" name="Search[name]" value="<?=$search['name']?>" id="name" placeholder="姓名">
+            <input type="text" class="form-control" name="Search[name]" value="<?=Html::encode($search['name'])?>" id="name" placeholder="姓名">
         </div>
         <div class="form-group">
             <label class="" for="sid">OR 学号</label>
-            <input type="number" class="form-control" name="Search[sid]" value="<?=$search['sid']?>" id="sid" placeholder="学号">
+            <input type="number" class="form-control" name="Search[sid]" value="<?=Html::encode($search['sid'])?>" id="sid" placeholder="学号">
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
@@ -38,17 +40,17 @@ $this->title = '面试';
         <tbody>
         <?php foreach ($data['data'] as $v): ?>
             <tr>
-                <th scope="row"><?= $v['id']?></th>
-                <td><?= $v['resume']['name']?></td>
-                <td><?= $v['resume']['sid']?></td>
-                <td><?= $v['resume']['sex']?></td>
-                <td><?= $v['resume']['first_wish']?></td>
-                <td><?= $v['resume']['second_wish']?></td>
+                <th scope="row"><?= Html::encode($v['sign']['id'])?></th>
+                <td><?= Html::encode($v['name'])?></td>
+                <td><?= Html::encode($v['sid'])?></td>
+                <td><?= Html::encode($v['sex'])?></td>
+                <td><?= Html::encode($v['first_wish'])?></td>
+                <td><?= Html::encode($v['second_wish'])?></td>
                 <td>
-                    <a href="<?=\yii\helpers\Url::to(['detail','id'=>$v['resume']['id']])?>">查看简历</a>
+                    <a href="<?=\yii\helpers\Url::to(['detail','id'=>$v['id']])?>">查看简历</a>
                 </td>
                 <td>
-                    <?= date('m-d h:i',$v['time'])?>
+                    <?= Html::encode(date('m-d H:i',$v['sign']['time']))?>
                 </td>
             </tr>
         <?php endforeach;?>

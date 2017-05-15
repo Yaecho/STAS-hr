@@ -1,5 +1,7 @@
 <?php
 
+use yii\helpers\Html;
+
 $this->title = '签到';
 ?>
 
@@ -8,11 +10,11 @@ $this->title = '签到';
         <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
         <div class="form-group">
             <label class="" for="name">姓名</label>
-            <input type="text" class="form-control" name="name" value="<?=$search['name']?>" id="name" placeholder="姓名">
+            <input type="text" class="form-control" name="name" value="<?=Html::encode($search['name'])?>" id="name" placeholder="姓名">
         </div>
         <div class="form-group">
             <label class="" for="sid">OR 学号</label>
-            <input type="number" class="form-control" name="sid" value="<?=$search['sid']?>" id="sid" placeholder="学号">
+            <input type="number" class="form-control" name="sid" value="<?=Html::encode($search['sid'])?>" id="sid" placeholder="学号">
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
@@ -28,6 +30,7 @@ $this->title = '签到';
             <th>性别</th>
             <th>第一志愿</th>
             <th>第二志愿</th>
+            <th>面试部门</th>
             <th>签到</th>
             <th>签到时间</th>
         </tr>
@@ -35,24 +38,31 @@ $this->title = '签到';
         <tbody>
         <?php foreach ($data['data'] as $v): ?>
         <tr>
-            <th scope="row"><?= $v['id']?></th>
-            <td><?= $v['name']?></td>
-            <td><?= $v['sid']?></td>
-            <td><?= $v['sex']?></td>
-            <td><?= $v['first_wish']?></td>
-            <td><?= $v['second_wish']?></td>
-            <td id="sign-<?= $v['id']?>">
+            <th scope="row"><?= Html::encode($v['id'])?></th>
+            <td><?= Html::encode($v['name'])?></td>
+            <td><?= Html::encode($v['sid'])?></td>
+            <td><?= Html::encode($v['sex'])?></td>
+            <td><?= Html::encode($v['first_wish'])?></td>
+            <td><?= Html::encode($v['second_wish'])?></td>
+            <td>
                 <?php if (empty($v['sign'])) :?>
-                    <a href="javascript:;" onclick="sign('<?= $v['id']?>')">签到</a>
+                    <?= Html::encode($v['first_wish'])?>
                 <?php else:?>
-                    <a href="javascript:;" onclick="getRoom('<?= $v['id']?>')">已签到</a>
+                    <?= Html::encode($v['sign']['department'])?>
                 <?php endif;?>
             </td>
-            <td id="signT-<?= $v['id']?>">
+            <td id="sign-<?= Html::encode($v['id'])?>">
+                <?php if (empty($v['sign'])) :?>
+                    <a href="javascript:;" onclick="sign('<?= Html::encode($v['id'])?>')">签到</a>
+                <?php else:?>
+                    <a href="javascript:;" onclick="getRoom('<?= Html::encode($v['id'])?>')">已签到</a>
+                <?php endif;?>
+            </td>
+            <td id="signT-<?= Html::encode($v['id'])?>">
                 <?php if (empty($v['sign'])) :?>
                     未签到
                 <?php else:?>
-                    <?= date('m-d h:i',$v['sign']['time'])?>
+                    <?= Html::encode(date('m-d h:i',$v['sign']['time']))?>
                 <?php endif;?>
             </td>
         </tr>
