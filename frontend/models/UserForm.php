@@ -161,4 +161,40 @@ class UserForm extends Model
         return false;
     }
 
+    /*
+     * 插入多行数据
+     */
+    public static function addAll($data)
+    {
+        //事务
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $time = time();
+            $all = [];
+            foreach ($data as $v) {
+                $password = empty($v[3]) ? $v[2] : $v[3];
+                $temp = [$v[1], $v[2], $v[7], $v[4], $v[5], $v[6], $v[8], $v[9], $v[10], $v[11],
+                    Yii::$app->security->generateRandomString(),
+                    Yii::$app->security->generatePasswordHash($password),
+                    $time, $time];
+                $all[] = $temp;
+                unset($temp);
+            }
+
+            $connection = Yii::$app->getDb();
+
+            $model = $connection->createCommand()
+                ->batchInsert(UserModel::tableName(), ['truename', 'username', 'department', 'class', 'phone',
+                    'qq', 'duty', 'birthday', 'appearance', 'dorm', 'auth_key', 'password_hash', 'created_at',
+                    'updated_at'
+                ], $all);
+            $transaction->commit();
+            return $model->execute();
+        }catch (\Exception $e){
+            $transaction->rollBack();
+            //$this->_lastError =$e->getMessage();
+            return false;
+        }
+    }
+
 }

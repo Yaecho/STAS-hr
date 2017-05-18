@@ -43,7 +43,7 @@ AppAsset::register($this);
     } else {
         $menuItems[] =
         [
-            'label' => '退出(' . Yii::$app->user->identity->username . ')',
+            'label' => '退出(' . Yii::$app->user->identity->truename . ')',
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post'],
         ];

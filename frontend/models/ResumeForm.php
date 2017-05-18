@@ -104,10 +104,10 @@ class ResumeForm extends Model
             'created_time' => '创建时间',
             'hobbies' => '兴趣爱好',
             'sid' => '学号',
-            'not_recycling' => '回收站标志',
             'is_send' => '短信发送状态',
             'code' => '短信确认码',
             'res' => '短信确认',
+            'not_recycling' => '回收站标志',
         ];
     }
 
@@ -322,5 +322,21 @@ class ResumeForm extends Model
         return $model;
     }
 
+    /*
+     * 导出简历
+     */
+    public static function exportData($cond = [])
+    {
+        $model = new ResumeModel();
+        $data = $model::find()->with(['sign', 'hire'])->where($cond)->asArray()->all();
+
+        foreach ($data as $k=>$v){
+            $data[$k]['created_time'] = date('m-d H:i', $v['created_time']);
+            $data[$k]['sign'] = empty($v['sign'])?'0':'1';
+            $data[$k]['hire'] = empty($v['hire'])?'0':'1';
+        }
+
+        return $data;
+    }
 
 }

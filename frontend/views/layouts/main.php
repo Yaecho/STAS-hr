@@ -43,7 +43,7 @@ AppAsset::register($this);
     } else {
         $menuItems[] =
         [
-            'label' => '退出(' . Yii::$app->user->identity->username . ')',
+            'label' => '退出(' . Yii::$app->user->identity->truename . ')',
             'url' => ['/site/logout'],
             'linkOptions' => ['data-method' => 'post'],
         ];
@@ -74,7 +74,7 @@ AppAsset::register($this);
                     <a href="<?=Url::to(['resume/index'])?>" class="list-group-item">简历管理</a>
                     <a href="<?=Url::to(['repeat-resume/index'])?>" class="list-group-item">重复简历筛选</a>
                     <a href="<?=Url::to(['recycle/recycle'])?>" class="list-group-item">简历回收站</a>
-                    <a href="<?=Url::to(['import-export/index'])?>" class="list-group-item">导入导出</a>
+                    <a href="<?=Url::to(['import-and-export/index'])?>" class="list-group-item">导入导出</a>
                     <a href="<?=Url::to(['sms/index'])?>" class="list-group-item">短信发送</a>
                     <a href="<?=Url::to(['room-assignment/index'])?>" class="list-group-item">面试教室</a>
                     <a href="<?=Url::to(['guide/index'])?>" target="_blank" class="list-group-item">签到人员入口</a>
