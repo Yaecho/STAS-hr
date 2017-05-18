@@ -4,13 +4,13 @@ namespace frontend\controllers;
 
 use frontend\controllers\base\BaseController;
 use frontend\models\ResumeForm;
-use phpDocumentor\Reflection\Types\Null_;
+//use phpDocumentor\Reflection\Types\Null_;
 use Yii;
-use common\models\ResumeModel;
+//use common\models\ResumeModel;
 use common\models\ResumeSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+//use yii\web\Controller;
+//use yii\web\NotFoundHttpException;
+//use yii\filters\VerbFilter;
 
 /**
  * ResumeController implements the CRUD actions for ResumeModel model.
@@ -75,12 +75,12 @@ class ResumeController extends BaseController
      */
     public function actionDelete($id)
     {
-        $model = ResumeForm::findModelById($id);
-        $model->not_recycling = '0';
-        if($model->save()){
+        $model = new ResumeForm();
+
+        if($model->recycling($id)){
             $this->success('移至回收站成功');
         }else{
-            $this->error('移至回收站失败');
+            $this->error($model->_lastError);
         }
 
         return $this->redirect(['index']);

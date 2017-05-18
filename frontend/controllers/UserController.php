@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use frontend\controllers\base\BaseController;
+use frontend\models\UserForm;
 use Yii;
 use common\models\UserModel;
 use common\models\UserSearch;
@@ -91,6 +92,34 @@ class UserController extends BaseController
             'model' => $model,
         ]);
 
+    }
+
+    /*
+     * 增加授权
+     */
+    public function actionAssignAuth(){
+        $param= Yii::$app->request->post('param');
+        if($param['id'] !== '' and $param['role'] !== ''){
+            if(UserForm::assignAuth($param['id'],$param['role'])){
+                $this->success('授权成功');
+            }else{
+                $this->error('授权失败');
+            }
+        }
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    /*
+     * 移除授权
+     */
+    public function actionRemoveAuth($id, $role)
+    {
+        if(UserForm::removeAuth($id, $role)){
+            $this->success('移除授权成功');
+        }else{
+            $this->error('移除授权失败');
+        }
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

@@ -35,6 +35,7 @@ $this->title = '面试';
             <th>第二志愿</th>
             <th>面试</th>
             <th>签到时间</th>
+            <th>标记录用</th>
         </tr>
         </thead>
         <tbody>
@@ -51,6 +52,15 @@ $this->title = '面试';
                 </td>
                 <td>
                     <?= Html::encode(date('m-d H:i',$v['sign']['time']))?>
+                </td>
+                <td>
+                    <?php
+                    if(empty($v['hire'])){
+                        echo '未标记';
+                    }else{
+                        echo '<div style="color: #00aa00">已标记</div>';
+                    }
+                    ?>
                 </td>
             </tr>
         <?php endforeach;?>

@@ -197,6 +197,21 @@ class ResumeForm extends Model
     }
 
     /*
+     * 移至回收站
+     */
+    public function recycling($id)
+    {
+        $model = self::findModelById($id);
+        $model->not_recycling = '0';
+        if($model->save()){
+            return true;
+        }else{
+            $this->_lastError = '移至回收站失败';
+            return false;
+        }
+    }
+
+    /*
      * 删除简历及关联表
      */
     public function trueDetele($id)
@@ -263,7 +278,7 @@ class ResumeForm extends Model
     /*
      * 获得简历列表
      */
-    public static function getList($cond, $curPage = 1,$pageSize = 5, $orderBy = ['resume.id' => SORT_DESC], $isGuide = false)
+    public static function getList($cond, $curPage = 1,$pageSize = 5, $orderBy = ['resume.id' => SORT_DESC], $isGuide = false )
     {
         $model = new ResumeModel();
         //查询语句
@@ -275,7 +290,7 @@ class ResumeForm extends Model
         $select = 'resume.id,resume.name,resume.sex,resume.phone,resume.first_wish,resume.second_wish,resume.sid';
 
         $query = $model->find()
-            ->joinWith(['sign'])
+            ->joinWith(['sign', 'hire'])
             //->select("sign_table.*, hire.*, resume.*");
             ->select($select)
             ->where($cond)
