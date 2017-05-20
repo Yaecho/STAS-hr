@@ -30,6 +30,7 @@ class RoomAssignmentModel extends \common\models\base\BaseModel
             [['department', 'classroom'], 'required'],
             [['department'], 'string', 'max' => 25],
             [['classroom'], 'string', 'max' => 50],
+            [['department'], 'unique']
         ];
     }
 

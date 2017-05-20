@@ -9,6 +9,10 @@ use yii\grid\GridView;
 
 $this->title = '简历管理';
 $this->params['breadcrumbs'][] = $this->title;
+
+foreach (\Yii::$app->params['department'] as $v){
+    $department[$v] =$v;
+}
 ?>
 <div class="resume-model-index">
 
@@ -34,7 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'dorm',
             // 'phone',
             // 'qq',
-            'first_wish',
+            'first_wish'=>[
+                'attribute' => 'first_wish',
+                'filter' => $department,
+            ],
             // 'second_wish',
             // 'myself',
             // 'hope',
@@ -47,14 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_time:datetime',
             // 'hobbies',
             // 'sid',
-            'is_send'=>[
+            /*'is_send'=>[
                 'attribute' => 'is_send',
                 'value' => function($model){
 
                     return ($model->is_send == 1)?'已发送':'未发送';
                 },
                 'filter' => ['1'=>'已发送','0'=>'未发送'],
-            ],
+            ],*/
             // 'code',
             'res'=>[
                 'attribute' => 'res',

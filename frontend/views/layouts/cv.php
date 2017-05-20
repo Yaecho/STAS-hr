@@ -52,7 +52,7 @@ AppAsset::register($this);
     <footer class="am-footer am-footer-default">
         <br>
         <div class="am-footer-miscs">
-            <p>CopyRight©<?= date('Y')?> 南京工业大学校大学生科协.</p>
+            <p>CopyRight©<?= date('Y')?> 南京工业大学大学生科学技术协会.</p>
             <p>由 <a href="http://www.yiiframework.com/" rel="external" target="_blank">Yii框架</a> 强力驱动</p>
         </div>
     </footer>

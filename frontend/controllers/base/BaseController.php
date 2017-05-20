@@ -7,16 +7,13 @@ use yii\web\Controller;
 class BaseController extends Controller
 {
 
-    public function beforeAction($action,$other = Null)
+    public function beforeAction($action)
     {
         if (!parent::beforeAction($action)) {
             return false;
         }
 
         if (isset(Yii::$app->user->identity->id) and Yii::$app->user->identity->id === 1){
-            if ($other !== Null){
-                return 'othersuccess';
-            }
             return true;
         }
 
@@ -26,18 +23,18 @@ class BaseController extends Controller
         if ($controller === 'site'){
             return true;
         }
-        if (\Yii::$app->user->getIsGuest()) {
+
+        if (Yii::$app->user->getIsGuest()) {
             return $this->redirect(['/site/login']);
+        }
+
+        if ($controller === 'space'){
+            return true;
         }
 
 
         $permissionName = $controller.'/'.$action;
-        $permissionCan = (\Yii::$app->user->can($permissionName) or \Yii::$app->user->can(($controller.'/*')));
-
-        if ($other !== Null){
-           if ($permissionCan and \Yii::$app->user->can($other))
-               return 'othersuccess';
-        }
+        $permissionCan = (Yii::$app->user->can($permissionName) or Yii::$app->user->can(($controller.'/*')));
 
 
         if(!$permissionCan && Yii::$app->getErrorHandler()->exception === null){

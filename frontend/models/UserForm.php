@@ -175,7 +175,7 @@ class UserForm extends Model
                 $password = empty($v[3]) ? $v[2] : $v[3];
                 $temp = [$v[1], $v[2], $v[7], $v[4], $v[5], $v[6], $v[8], $v[9], $v[10], $v[11],
                     Yii::$app->security->generateRandomString(),
-                    Yii::$app->security->generatePasswordHash($password),
+                    Yii::$app->security->generatePasswordHash($password, 10),
                     $time, $time];
                 $all[] = $temp;
                 unset($temp);

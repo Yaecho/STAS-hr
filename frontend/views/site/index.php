@@ -1,6 +1,6 @@
 <?php
 
-//use yii\helpers\Html;
+use yii\helpers\Html;
 
 $this->title = '南京工业大学大学生科学技术协会';
 $this->params['nav'] = '1';
@@ -76,53 +76,21 @@ $this->params['nav'] = '1';
                     <div class="am-u-md-12">
                         <div class="am-form-group">
                             <h3>12、第一意向：</h3>
+                            <?php foreach(Yii::$app->params['department'] as $v):?>
                             <label class="am-radio-inline">
-                                <input type="radio" value="办公室" name="ResumeForm[first_wish]" data-am-ucheck required> 办公室
+                                <input type="radio" value="<?= Html::encode($v)?>" name="ResumeForm[first_wish]" data-am-ucheck required> <?= Html::encode($v)?>
                             </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="外联部" name="ResumeForm[first_wish]" data-am-ucheck> 外联部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="新闻宣传部" name="ResumeForm[first_wish]" data-am-ucheck> 新闻宣传部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="科普活动部" name="ResumeForm[first_wish]" data-am-ucheck> 科普活动部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="竞赛服务部" name="ResumeForm[first_wish]" data-am-ucheck> 竞赛服务部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="项目支持部" name="ResumeForm[first_wish]" data-am-ucheck> 项目支持部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="科技服务部" name="ResumeForm[first_wish]" data-am-ucheck> 科技服务部
-                            </label>
+                            <?php endforeach;?>
                         </div>
                     </div>
                     <div class="am-u-md-12">
                         <div class="am-form-group">
                             <h3>13、第二意向：</h3>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="办公室" name="ResumeForm[second_wish]" data-am-ucheck required> 办公室
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="外联部" name="ResumeForm[second_wish]" data-am-ucheck> 外联部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="新闻宣传部" name="ResumeForm[second_wish]" data-am-ucheck> 新闻宣传部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="科普活动部" name="ResumeForm[second_wish]" data-am-ucheck> 科普活动部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="竞赛服务部" name="ResumeForm[second_wish]" data-am-ucheck> 竞赛服务部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="项目支持部" name="ResumeForm[second_wish]" data-am-ucheck> 项目支持部
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="科技服务部" name="ResumeForm[second_wish]" data-am-ucheck> 科技服务部
-                            </label>
+                            <?php foreach(Yii::$app->params['department'] as $v):?>
+                                <label class="am-radio-inline">
+                                    <input type="radio" value="<?= Html::encode($v)?>" name="ResumeForm[second_wish]" data-am-ucheck required> <?= Html::encode($v)?>
+                                </label>
+                            <?php endforeach;?>
                             <label class="am-radio-inline">
                                 <input type="radio" value="无" name="ResumeForm[second_wish]" data-am-ucheck> 不填
                             </label>

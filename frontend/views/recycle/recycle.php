@@ -45,14 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_time',
             // 'hobbies',
             // 'sid',
-            'is_send'=>[
+            /*'is_send'=>[
                 'attribute' => 'is_send',
                 'value' => function($model){
 
                     return ($model->is_send == 1)?'已发送':'未发送';
                 },
                 'filter' => ['1'=>'已发送','0'=>'未发送']
-            ],
+            ],*/
             // 'code',
             'res'=>[
                 'attribute' => 'res',

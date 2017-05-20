@@ -5,14 +5,14 @@ namespace frontend\controllers;
 use Yii;
 use common\models\RoomAssignmentModel;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
+use frontend\controllers\base\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * RoomAssignmentController implements the CRUD actions for RoomAssignmentModel model.
  */
-class RoomAssignmentController extends Controller
+class RoomAssignmentController extends BaseController
 {
     /**
      * @inheritdoc

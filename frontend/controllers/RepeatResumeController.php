@@ -36,7 +36,7 @@ class RepeatResumeController extends BaseController
     {
         $connection = Yii::$app->getDb();
 
-        $count = $connection->createCommand('SELECT count(*) as num FROM resume WHERE sid in ( SELECT sid FROM resume WHERE not_recycling = 1 GROUP BY sid HAVING count(sid)>1) ORDER BY sid');
+        $count = $connection->createCommand('SELECT count(*) as num FROM resume WHERE sid in ( SELECT sid FROM resume WHERE not_recycling = 1 GROUP BY sid HAVING count(sid)>1) AND not_recycling = 1 ORDER BY sid');
         $count = $count->queryOne();
 
         $data['count'] = $count['num'];
@@ -56,8 +56,7 @@ class RepeatResumeController extends BaseController
         $data['end'] = (ceil($data['count']/$pageSize) == $curPage)?$data['count']:($curPage-1)*$pageSize+$pageSize;
 
         $start = ($curPage-1)*$pageSize;
-        $end = $start + $pageSize;
-        $command = $connection->createCommand("SELECT id,name,sid,sex,first_wish,second_wish,created_time FROM resume WHERE sid in ( SELECT sid FROM resume  WHERE not_recycling = 1 GROUP BY sid HAVING count(sid)>1) ORDER BY sid LIMIT :start,:end", [':start' => $start, ':end' => $end]);
+        $command = $connection->createCommand("SELECT id,name,sid,sex,first_wish,second_wish,created_time FROM resume WHERE sid in ( SELECT sid FROM resume  WHERE not_recycling = 1 GROUP BY sid HAVING count(sid)>1) AND not_recycling = 1  ORDER BY sid LIMIT :start,:size", [':start' => $start, ':size' => $pageSize]);
 
         $data['data'] = $command->queryAll();
 

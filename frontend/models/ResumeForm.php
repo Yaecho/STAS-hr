@@ -7,6 +7,7 @@ use common\models\SignTableModel;
 use Yii;
 use common\models\ResumeModel;
 use yii\base\Model;
+use common\models\SettingModel;
 
 class ResumeForm extends Model
 {
@@ -336,6 +337,32 @@ class ResumeForm extends Model
             $data[$k]['hire'] = empty($v['hire'])?'0':'1';
         }
 
+        return $data;
+    }
+
+    /*
+    * 短信
+    */
+    public static function smsData($curPage)
+    {
+        $model = new SettingModel();
+        $smsData = $model::findOne(['name' => 'smscontect']);
+        $smsTemplate = explode('$code$',$smsData->value);
+        
+        $model = new ResumeModel();
+        $count = $model::find()->where(['not_recycling' => '1', 'res' => '0'])->count();
+        if($count == 0){
+            return false;
+        }
+        $pageSize = ceil($count/3);
+        $resumes = $model::find()->select(['phone', 'code'])->where(['not_recycling' => '1', 'res' => '0'])
+        ->offset($curPage*$pageSize)->limit($pageSize)->asArray()->all();
+        
+        $data['mobile'] = '';$data['text'] = '';
+        foreach($resumes as $v){
+            $data['mobile'] .= $v['phone'].',';
+            $data['text'] .= $smsTemplate[0].$v['code'].$smsTemplate[1].',';
+        }
         return $data;
     }
 

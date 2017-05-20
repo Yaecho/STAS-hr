@@ -15,8 +15,7 @@ $this->params['nav'] = '2';
                 <div class="am-g">
 
                     <div class="am-u-md-6 am-u-sm-centered">
-                        <form action="<?=\yii\helpers\Url::to(['site/sms-res'])?>" method="post" class="am-form" id="smsResForm" data-am-validator>
-                            <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
+                        <form class="am-form" id="smsResForm" data-am-validator>
                             <div class="am-input-group">
                                 <input type="number" class="am-form-field" name="ResumeForm[code]" id="code" placeholder="短信确认码" required="">
                                 <span class="am-input-group-btn">
@@ -32,3 +31,14 @@ $this->params['nav'] = '2';
         </div>
     </div>
 </div>
+<script>
+    document.onkeydown = function(e){
+        if(!e){
+            e = window.event;
+        }
+        if((e.keyCode || e.which) == 13){
+            alert('请点击提交按钮')
+            return false;
+        }
+    }
+</script>
