@@ -76,6 +76,15 @@ class SiteController extends BaseController
     public function actionIndex()
     {
         $this->layout = 'cv.php';
+
+        $switch = \common\models\SettingModel::findOne('resume');
+        if($switch->value === 'false') {
+            $smsData = \common\models\SettingModel::findOne('smscontect');
+            $smsTemplate = explode('$code$',$smsData->value);
+            $info = $smsTemplate[0].'（见短信通知）'.$smsTemplate[1];
+            return $this->render('info',['info' => $info, 'nav' => '1', 'h2' => '报名未开启或已关闭']);
+        }
+
         $model = new ResumeForm();
         //定义场景
         $model->setScenario(ResumeForm::SCENARIOS_CREATE);
@@ -95,6 +104,13 @@ class SiteController extends BaseController
     public function actionSmsRes()
     {
         $this->layout = 'cv.php';
+
+        $switch = \common\models\SettingModel::findOne('rescode');
+        if($switch->value === 'false') {
+            $info = '面试通知短信发送，后将会开启此功能。';
+            return $this->render('info',['info' => $info, 'nav' => '2', 'h2' => '短信确认码功能未开启！']);
+        }
+
 
         $model = new ResumeForm();
         $model->setScenario(ResumeForm::SCENARIOS_SMSRES);

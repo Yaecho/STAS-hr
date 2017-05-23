@@ -163,7 +163,8 @@ AppAsset::register($this);
                         <div class="link"><i class="fa fa-info-circle"></i>个人中心<i class="fa fa-chevron-down"></i></div>
                         <ul class="submenu">
                             <li><a href="<?=Url::to(['space/index'])?>">个人中心</a></li>
-                            <li><a href="#">HTML</a></li>
+                            <li><a href="<?=Url::to(['change-password'])?>">修改密码</a></li>
+                            <li><a href="<?=Url::to(['update-info'])?>">修改个人信息</a></li>
                             <li><a href="<?=Url::to(['guide/index'])?>" target="_blank">签到人员入口</a></li>
                             <li><a href="<?=Url::to(['interviewer/index'])?>" target="_blank">面试人员入口</a></li>
                         </ul>
@@ -200,8 +201,7 @@ AppAsset::register($this);
                     <li><div class="link"><i class="fa fa-sliders"></i>系统设置<i class="fa fa-chevron-down"></i></div>
                         <ul class="submenu">
                             <li><a href="<?=Url::to(['room-assignment/index'])?>">面试教室</a></li>
-                            <li><a href="<?=Url::to(['user/index'])?>">报名时间</a></li>
-                            <li><a href="<?=Url::to(['auth/index'])?>">短信确认设置</a></li>
+                            <li><a href="<?=Url::to(['setting/index'])?>">其他设置</a></li>
                         </ul>
                     </li>
                 </ul>
