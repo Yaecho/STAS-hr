@@ -14,6 +14,13 @@ return [
             'password' => 'o769Vhuyx7FRtzXm',
             'charset' => 'utf8',
         ],
+        'dbmb4' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=STASdata',     
+            'username' => 'STASdata',
+            'password' => 'o769Vhuyx7FRtzXm',
+            'charset' => 'utf8mb4',
+        ],
         'session' => [
             'class' => 'yii\web\DbSession',
             // 'db' => 'mydb',  // 数据库连接的应用组件ID，默认为'db'.

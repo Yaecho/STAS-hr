@@ -18,6 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </form>
 
 
-<p style="margin-top: 15px;">全部：<?=Html::encode($smsCount['all'])?> <!--已发送：--><?php//Html::encode($smsCount['is_send'])?>
+<p style="margin-top: 15px;">全部：<?=Html::encode($smsCount['all'])?> <!--已发送：-->
     已确认：<?=Html::encode($smsCount['res'])?></p>
 <a class="btn btn-default" href="<?=Url::to(['sms-send'])?>">发送</a>

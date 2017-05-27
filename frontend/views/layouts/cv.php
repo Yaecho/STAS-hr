@@ -62,7 +62,7 @@ AppAsset::register($this);
             <div class="am-modal-bd" id="webInfoBd">
             </div>
             <div class="am-modal-footer">
-                <span class="am-modal-btn">确定</span>
+                <span class="am-modal-btn" id="webInfoConfirm">确定</span>
             </div>
         </div>
     </div>
@@ -150,6 +150,9 @@ AppAsset::register($this);
                             $('input:radio:checked').attr("checked",false);
                             resumeForm.validator('destroy');
                             store.clear();
+                            $('#webInfoConfirm').click(function(){
+                                location.reload();
+                            });
                         } else {
                             $('#webInfoBd').html(res.msg);
                             $('#webInfo').modal();

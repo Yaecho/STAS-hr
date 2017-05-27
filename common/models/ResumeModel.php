@@ -40,6 +40,14 @@ class ResumeModel extends \common\models\base\BaseModel
         return 'resume';
     }
 
+    /*
+    * charset = utf8md4 以支持emoji 
+    */
+    public static function getDb()
+    {
+        return Yii::$app->get('dbmb4');
+    }
+
     /**
      * 关联关系
      */
