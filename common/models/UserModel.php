@@ -197,7 +197,7 @@ class UserModel extends BaseModel implements IdentityInterface
     {
         return [
             'id'=>'ID',
-            'username'=>'登录名',
+            'username'=>'登录名/学号',
             'truename'=>'姓名',
             'department'=>'部门',
             'class'=>'班级',

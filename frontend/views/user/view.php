@@ -6,13 +6,17 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\UserModel */
 
-$this->title = $model->id;
+$this->title = $model->username;
 $this->params['breadcrumbs'][] = ['label' => '用户管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$auth = Yii::$app->authManager;
+$roleData = $auth->getRolesByUser($model->id);
+$roles = Yii::$app->authManager->getRoles();
 ?>
 <div class="user-model-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <p>
         <?= Html::a('更新', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -52,5 +56,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
         ],
     ]) ?>
+    <br>
+    <p><strong>角色：</strong>
+        <?php foreach ($roleData as $v):?>
+            <strong><?= Html::encode($v->description)?></strong> |
+        <?php endforeach;?>
+    </p>
 
 </div>

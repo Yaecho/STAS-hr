@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'username')->textInput() ?>
 
     <div class="form-group field-usermodel-password">
-        <label class="control-label" for="usermodel-password">Password</label>
+        <label class="control-label" for="usermodel-password">密码</label>
         <input type="password" id="usermodel-password" class="form-control" name="password">
 
         <div class="help-block"></div>
@@ -31,7 +31,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'appearance')->textInput() ?>
     <?= $form->field($model, 'dorm')->textInput() ?>
     <?= $form->field($model, 'role')->textInput() ?>
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList(['0'=>'未激活','10'=>'激活']) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? '新建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

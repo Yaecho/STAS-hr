@@ -33,6 +33,10 @@ class ImportAndExportController extends BaseController
     public function actionDownloadCsv()
     {
         $data = ResumeForm::exportData();
+        foreach ($data as $key => $value){
+            $data[$key] = str_replace(["\r\n", "\n", "\r", ','], ['','','',''] , $value);
+        }
+
         $csv = new Csv();
         $header = new ResumeForm();
         $headerData = $header->attributeLabels();
@@ -41,6 +45,7 @@ class ImportAndExportController extends BaseController
         $headerData[] = '录用';
 
         $csv->header = $headerData;
+        //var_dump($data);exit();
         $csv->writeCSVDown('resume-'.date('Y-m-d H:i', time()).'.csv', $data);
     }
 

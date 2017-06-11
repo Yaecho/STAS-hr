@@ -8,7 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <form action="<?=\yii\helpers\Url::to(['upload-csv'])?>" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
     <div class="form-group">
-        <input class="btn btn-default" name="csv" type="file" id="InputFile">
+        <input class="btn btn-default" name="csv" type="file" id="InputFile" required>
         <p class="help-block">导入用sudo请上传csv格式文件 <a href="<?=\yii\helpers\Url::to(['template'])?>">模板下载</a></p>
     </div>
 

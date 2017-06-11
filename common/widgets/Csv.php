@@ -145,7 +145,7 @@ class Csv
                 $key = empty($this->keys[$i])?$i:$this->keys[$i];
                 $data[$i] = $this->trim?trim($data[$i],"'"):$data[$i];
 
-                $fileType = mb_detect_encoding($data[$i] , array("ASCII",'UTF-8',"GB2312","GBK")) ;
+                $fileType = mb_detect_encoding($data[$i] , array("ASCII",'UTF-8',"GB2312","GBK"));
 
                 if($fileType == 'EUC-CN'){
                     $out[$n][$key] = iconv('GBK', 'utf-8', $data[$i]);
@@ -210,6 +210,15 @@ class Csv
             }
             $out .="\n";
         }
+
+      
+        $fileType = mb_detect_encoding($out, array("ASCII",'UTF-8',"GB2312","GBK"));
+        
+        if($fileType != 'GBK'){
+           $out = iconv($fileType, 'GBK//IGNORE', $out);
+        }
+        
+
         echo $out;
     }
 
