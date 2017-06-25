@@ -115,6 +115,31 @@ class SiteController extends BaseController
         $model = new ResumeForm();
         $model->setScenario(ResumeForm::SCENARIOS_SMSRES);
         if($model->load(Yii::$app->request->post())) {
+            /** 防止暴力查询 **/
+            $ccNow = time();
+            $session = \Yii::$app->session;
+            $ccLasttime = $session->get('cc_lasttime');
+            if($ccLasttime){
+                $ccCounter = $session->get('cc_counter')+1;
+                $session->set('cc_counter', $ccCounter);
+                $session->set('cc_lasttime', $ccNow);
+            }else{
+                $ccLasttime = $ccNow;
+                $ccCounter = 1;
+                $session->set('cc_lasttime', $ccLasttime);
+                $session->set('cc_counter', $ccCounter);
+            } 
+            if(($ccNow-$ccLasttime)<20){//20秒内刷新3次以上可能为cc攻击
+                if($ccCounter>=3){
+                    return json_encode(['code' => '0','msg' => '查询次数够多，请稍后再试！']);
+                    exit;
+                }
+            }else{
+                $ccCounter = 0;
+                $session->set('cc_lasttime', $ccNow);
+                $session->set('cc_counter', $ccCounter);
+            } 
+
             if (!$model->validate()) {
                 return json_encode(['code' => '0','msg' => '短信确认码错误']);
             }
