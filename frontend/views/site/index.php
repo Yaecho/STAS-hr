@@ -5,7 +5,7 @@ use yii\helpers\Html;
 $this->title = '南京工业大学大学生科学技术协会';
 $this->params['nav'] = '1';
 ?>
-<div class="am-container" style="max-width: 700px;">
+<div class="am-container" style="max-width: 800px;">
     <br>
     <div class="am-panel am-panel-default am-animation-scale-up">
         <div class="am-panel-bd">
@@ -28,10 +28,10 @@ $this->params['nav'] = '1';
                         </div>
                         <div class="am-form-group">
                             <h3>3、性别：</h3>
-                            <label class="am-radio-inline">
+                            <label class="am-radio">
                                 <input type="radio" name="ResumeForm[sex]" value="男" data-am-ucheck required> 男
                             </label>
-                            <label class="am-radio-inline">
+                            <label class="am-radio">
                                 <input type="radio" name="ResumeForm[sex]" value="女" data-am-ucheck> 女
                             </label>
                         </div>
@@ -50,7 +50,21 @@ $this->params['nav'] = '1';
                         </div>
                         <div class="am-form-group">
                             <h3>6、政治面貌：</h3>
-                            <input type="text" name="ResumeForm[identity]" id="identity" class="am-form-field" placeholder="输入你的政治面貌" minlength="1" maxlength="10" required="">
+                            <label class="am-radio">
+                                <input type="radio" name="ResumeForm[identity]" value="共青团员" data-am-ucheck required> 共青团员
+                            </label>
+                            <label class="am-radio">
+                                <input type="radio" name="ResumeForm[identity]" value="预备党员" data-am-ucheck> 预备党员
+                            </label>
+                            <label class="am-radio">
+                                <input type="radio" name="ResumeForm[identity]" value="中共党员" data-am-ucheck> 中共党员
+                            </label>
+                            <label class="am-radio">
+                                <input type="radio" name="ResumeForm[identity]" value="群众" data-am-ucheck> 群众
+                            </label>
+                            <label class="am-radio">
+                                <input type="radio" name="ResumeForm[identity]" value="其他" data-am-ucheck> 其他
+                            </label>  
                         </div>
                         <div class="am-form-group">
                             <h3>7、学院：</h3>
@@ -77,7 +91,7 @@ $this->params['nav'] = '1';
                         <div class="am-form-group">
                             <h3>12、第一意向：</h3>
                             <?php foreach(Yii::$app->params['department'] as $v):?>
-                            <label class="am-radio-inline">
+                            <label class="am-radio">
                                 <input type="radio" value="<?= Html::encode($v)?>" name="ResumeForm[first_wish]" data-am-ucheck required> <?= Html::encode($v)?>
                             </label>
                             <?php endforeach;?>
@@ -87,11 +101,11 @@ $this->params['nav'] = '1';
                         <div class="am-form-group">
                             <h3>13、第二意向：</h3>
                             <?php foreach(Yii::$app->params['department'] as $v):?>
-                                <label class="am-radio-inline">
+                                <label class="am-radio">
                                     <input type="radio" value="<?= Html::encode($v)?>" name="ResumeForm[second_wish]" data-am-ucheck required> <?= Html::encode($v)?>
                                 </label>
                             <?php endforeach;?>
-                            <label class="am-radio-inline">
+                            <label class="am-radio">
                                 <input type="radio" value="无" name="ResumeForm[second_wish]" data-am-ucheck> 不填
                             </label>
                         </div>

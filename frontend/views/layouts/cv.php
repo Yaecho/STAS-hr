@@ -91,14 +91,11 @@ AppAsset::register($this);
                 var data = store.get('resumeData');
                 for(var i in data){
                     if (data.hasOwnProperty(i)) {
-
-                        if (i !== 'ResumeForm[second_wish]' && i !== 'ResumeForm[first_wish]' && i !== 'ResumeForm[sex]') {
+                        if (i !== 'ResumeForm[second_wish]' && i !== 'ResumeForm[first_wish]' && i !== 'ResumeForm[sex]' && i !== 'ResumeForm[identity]') {
                             $('#resumeForm input[name="'+ i +'"],#resumeForm textarea[name="'+ i +'"]').val(data[i]);
                         } else {
                             $('#resumeForm input[type=radio][name="'+i+'"][value="'+ data[i] +'"]').attr("checked","checked");
                         }
-
-
                     }
                 }
             }
