@@ -42,4 +42,20 @@ class SettingModel extends \common\models\base\BaseModel
             'value' => 'Value',
         ];
     }
+
+    public function yunpian($api = null)
+    {
+        if (is_null($api)) {
+            return self::findOne(['name' => 'yunpian'])->value;
+        }
+        $setting = self::findOne(['name' => 'yunpian']);
+        $setting->value = $api;
+
+        if($setting->save()){
+            return true;
+        }else{
+            $this->_lastError = '云片网api修改失败！';
+        }
+        return false;
+    }
 }

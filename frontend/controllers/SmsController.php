@@ -85,4 +85,20 @@ class SmsController extends BaseController
         
         return $this->redirect(['index']);
     }
+
+    public function actionYunpianApi()
+    {
+        $api = Yii::$app->request->post('api');
+        $setting = new SettingModel();
+        if (!empty($api)) {
+            $result = $setting->yunpian($api);
+            if($result) {
+                $this->success('密匙保存成功');
+            }else{
+                $this->error('密匙保存失败');
+            }
+        }
+        $api = $setting->yunpian();
+        return $this->render('yunpian-api', ['data' => $api]);
+    }
 }
