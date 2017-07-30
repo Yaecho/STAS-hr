@@ -4,10 +4,12 @@
  */
 //You can get the APIKEY and APISECRET from http://www.yunpian.com/ when log on.
 
-use Yii;
+use common\models\SettingModel;
 
+
+$setting = new SettingModel();
 $yunpian_config = array();
-$yunpian_config['APIKEY'] = Yii::$app->params['YUMPIAN_APIKEY'];
+$yunpian_config['APIKEY'] = $setting->yunpian();
 
 
 // php sdk 暂不支持加密算法

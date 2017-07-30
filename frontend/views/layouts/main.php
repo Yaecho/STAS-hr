@@ -188,6 +188,7 @@ AppAsset::register($this);
                         <ul class="submenu">
                             <li><a href="<?=Url::to(['sms/index'])?>">短信发送</a></li>
                             <li><a href="<?=Url::to(['sms/phone-number'])?>">手动发送</a></li>
+                            <li><a href="<?=Url::to(['sms/yunpian-api'])?>">云片网API</a><li>
                         </ul>
                     </li>
                     <li><div class="link"><i class="fa fa-group"></i>用户面板<i class="fa fa-chevron-down"></i></div>
