@@ -58,4 +58,20 @@ class SettingModel extends \common\models\base\BaseModel
         }
         return false;
     }
+
+    public function IUrl($url = null)
+    {
+        if (is_null($url)) {
+            return self::findOne(['name' => 'i_url'])->value;
+        }
+        $setting = self::findOne(['name' => 'i_url']);
+        $setting->value = $url;
+
+        if($setting->save()){
+            return true;
+        }else{
+            $this->_lastError = '首页介绍网址修改失败！';
+        }
+        return false;
+    }
 }

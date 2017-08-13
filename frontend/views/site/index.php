@@ -11,7 +11,7 @@ $this->params['nav'] = '1';
         <div class="am-panel-bd">
             <br>
             <div class="am-text-center">
-                <p class="am-text-xl"><a href="http://mp.weixin.qq.com/s?__biz=MzA5Njk1NDYzOA==&mid=502309363&idx=1&sn=ded2e96251d8dc71fbc82c8e668228fc&scene=1&srcid=0904zMFFaTnRdUAJrwNFTr1J#rd" target="_blank" style="color:#000;">南京工业大学大学生科学技术协会</a></p>
+                <p class="am-text-xl"><a href="<?=$iUrl?>" target="_blank" style="color:#000;">南京工业大学大学生科学技术协会</a></p>
                 <p class="am-text-lg">报名表</p>
             </div>
             <form id="resumeForm" action="<?=\yii\helpers\Url::to(['site/index'])?>" method="post" class="am-form">

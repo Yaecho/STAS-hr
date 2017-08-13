@@ -13,7 +13,18 @@ class SettingController extends BaseController
     */
     public function actionIndex()
     {
-        $data = SettingModel::find()->where(['or',['name'=>'resume'],['name'=>'rescode']])->asArray()->all();
+        $iUrl = Yii::$app->request->post('iUrl');
+        $setting = new SettingModel();
+        if (!empty($iUrl)) {
+            $result = $setting->IUrl($iUrl);
+            if($result) {
+                $this->success('网址保存成功');
+            }else{
+                $this->error('网址保存失败');
+            }
+        }
+
+        $data = SettingModel::find()->where(['or',['name'=>'resume'],['name'=>'rescode'], ['name' => 'i_url']])->asArray()->all();
         foreach( $data as $k=>$v){
             $data[$v['name']] = $v['value'];
             unset($data[$k]);

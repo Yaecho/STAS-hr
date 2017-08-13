@@ -19,6 +19,16 @@ AppAsset::addCss($this,'@web/statics/css/bootstrap-switch.min.css');
     <label style="margin-right:10px;">短信确认码开关 </label>
     <input type="checkbox" class="form-control" name="rescode" <?php if($data['rescode'] ==='true') echo 'checked';?>>
 </div>
+<h4>首页介绍网址</h4>
+<div style="margin-top: 15px;"></div>
+<form method="post" action="<?=Url::to(['index'])?>">
+    <input type="hidden" name="_csrf-frontend" value="<?php echo Yii::$app->getRequest()->getCsrfToken(); ?>"/>
+  <div class="form-group">
+    <label>网址</label>
+    <input type="url" name="iUrl" class="form-control" value="<?=$data['i_url']?>">
+  </div>
+  <button type="submit" class="btn btn-default">提交</button>
+</form>
 
 <?php $this->beginBlock('switch'); ?>
 

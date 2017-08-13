@@ -15,6 +15,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use common\models\SettingModel;
 
 /**
  * Site controller
@@ -98,7 +99,9 @@ class SiteController extends BaseController
                 return json_encode(['code' => '1','msg' => '简历提交成功']);
             }
         }
-        return $this->render('index');
+        $iUrl = new SettingModel();
+        $iUrl = $iUrl->IUrl();
+        return $this->render('index', ['iUrl' => $iUrl]);
     }
 
     public function actionSmsRes()
