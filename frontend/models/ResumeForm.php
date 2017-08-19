@@ -343,27 +343,33 @@ class ResumeForm extends Model
     /*
     * 短信
     */
-    public static function smsData($curPage)
+    public static function smsData($pageSize)
     {
         $model = new SettingModel();
         $smsData = $model::findOne(['name' => 'smscontect']);
         $smsTemplate = explode('$code$',$smsData->value);
         
         $model = new ResumeModel();
-        $count = $model::find()->where(['not_recycling' => '1', 'res' => '0'])->count();
-        if($count == 0){
-            return false;
-        }
-        $pageSize = ceil($count/3);
-        $resumes = $model::find()->select(['phone', 'code'])->where(['not_recycling' => '1', 'res' => '0'])
-        ->offset($curPage*$pageSize)->limit($pageSize)->asArray()->all();
+        $resumes = $model::find()->select(['id', 'phone', 'code'])->where(['not_recycling' => '1', 'res' => '0', 'is_send' => '0'])
+        ->limit($pageSize)->asArray()->all();
         
         $data['mobile'] = '';$data['text'] = '';
         foreach($resumes as $v){
             $data['mobile'] .= $v['phone'].',';
             $data['text'] .= $smsTemplate[0].$v['code'].$smsTemplate[1].',';
         }
-        return $data;
+        $ids = array_column($resumes, 'id');
+        return ['data'=>$data, 'id' => $ids];
+    }
+
+    /*
+    *  更新is_send字段
+    */
+    public static function updateIsSend(array $ids)
+    {
+        $model = new ResumeModel();
+        $res = $model::updateAll(['is_send' => 1], ['id' => $ids]);
+        return $res;
     }
 
 }

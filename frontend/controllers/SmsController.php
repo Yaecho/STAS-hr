@@ -17,8 +17,8 @@ class SmsController extends BaseController
 
         $model = new ResumeModel();
         $sms['all'] = $model->find()->where(['not_recycling'=>'1'])->count();
-        //$sms['is_send'] = $model->find()->where(['not_recycling'=>'1','is_send'=>'1'])->count();
-        $sms['res'] = $model->find()->where(['not_recycling'=>'1','res'=>'1'])->count();
+        $sms['is_send'] = $model->find()->where(['not_recycling'=>'1','is_send'=>'1'])->count();
+        $sms['res'] = $model->find()->where(['not_recycling'=>'1', 'res' => '1'])->count();
 
         $model = new SettingModel();
         $smsPost = Yii::$app->request->post('smscontect');
@@ -63,24 +63,53 @@ class SmsController extends BaseController
 
     public function actionSmsSend()
     {
+        $cache = Yii::$app->cache;
+        $data = $cache->get('is_sending'); 
+        if ($data === false or $data === 0) { 
+            $cache->set('is_sending', 1, 5*60); 
+        }
+        if ($data === 1) {
+            $this->error('短信发送任务进行中，请稍后5分钟后再试。');
+            return $this->redirect(['index']);
+        }
+
+        ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
+        set_time_limit(300);// 通过set_time_limit(0)可以让程序无限制的执行下去
+
         require_once (__DIR__ . '/../lib/yunpian/config.php');
 
         $smsOperator = new SmsOperator();
 
-        $status = true;
         $totalCount = 0;
         $totalFee =0;
 
-        for($i=0;$i<3;$i++){
-            $data = ResumeForm::smsData($i);
-            $result = $smsOperator->multi_send($data);
-            $status = ($status and $result->success);
+        $partNum = 10;
+        $model = new ResumeModel();
+        $count = $model::find()->where(['not_recycling' => '1', 'res' => '0', 'is_send' => '0'])->count();
+        if($count == 0){
+            $this->error('没短信发送，瞎点什么。');
+            $cache->set('is_sending', 0, 5*60);
+            return $this->redirect(['index']);
+        }
+        $pageSize = ceil($count/$partNum);
+
+        for($i=0;$i<$partNum;$i++){
+            $data = ResumeForm::smsData($pageSize);
+            if (empty($data['id'])) continue;
+
+            if (!$data) {
+                $this->error('没有短信需要发送。');
+                $cache->set('is_sending', 0, 5*60);
+                return $this->redirect(['index']);
+            }
+            $result = $smsOperator->multi_send($data['data']);
             if($result->success){
                 $totalCount += $result->responseData['total_count'];
                 $totalFee += $result->responseData['total_fee'];
+                ResumeForm::updateIsSend($data['id']);
             }
         }
-        
+        $cache->set('is_sending', 0, 5*60); 
         $this->success('发送'.$totalCount.'条短信，花费'.$totalFee.'元。');
         
         return $this->redirect(['index']);
