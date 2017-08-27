@@ -110,7 +110,7 @@ class SiteController extends BaseController
 
         $switch = \common\models\SettingModel::findOne('rescode');
         if($switch->value === 'false') {
-            $info = '面试通知短信发送，后将会开启此功能。';
+            $info = '面试通知短信发送后将会开启此功能。';
             return $this->render('info',['info' => $info, 'nav' => '2', 'h2' => '短信确认码功能未开启！']);
         }
 

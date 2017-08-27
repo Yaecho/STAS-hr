@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 $this->title = '南京工业大学大学生科学技术协会';
-$this->params['nav'] = '1';
+$this->params['nav'] = $nav;
 ?>
 <div class="am-container" style="max-width: 700px;">
     <br>
