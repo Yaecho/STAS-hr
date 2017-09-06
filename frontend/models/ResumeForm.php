@@ -305,6 +305,34 @@ class ResumeForm extends Model
     }
 
     /*
+     * 获得简历列表
+     */
+    public static function getListForIntrrviewer($cond, $curPage = 1,$pageSize = 5, $orderBy = ['resume.id' => SORT_DESC])
+    {
+        $model = new ResumeModel();
+        //查询语句
+        if (Yii::$app->user->can('[EditAllResume]')){
+            $cond = ['and', ['not_recycling'=>'1'], $cond];
+        }else{
+            $cond = ['and', ['not_recycling'=>'1', 'department' => Yii::$app->user->identity->department], $cond];
+        }
+        $select = 'resume.id,resume.name,resume.sex,resume.phone,resume.first_wish,resume.second_wish,resume.sid';
+
+        $query = $model->find()
+            ->joinWith(['sign', 'hire'])
+            //->select("sign_table.*, hire.*, resume.*");
+            ->select($select)
+            ->where($cond)
+            //->with('sign')
+            ->orderBy($orderBy);
+        //获取分页数据
+        $res = $model->getPages($query, $curPage, $pageSize);
+
+        return $res;
+
+    }
+
+    /*
      * 通过id查找单个简历
      * id
      * not_recycling
