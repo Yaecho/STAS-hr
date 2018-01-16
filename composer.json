@@ -1,8 +1,8 @@
 {
-    "name": "yiisoft/yii2-app-advanced",
-    "description": "Yii 2 Advanced Project Template",
-    "keywords": ["yii2", "framework", "advanced", "project template"],
-    "homepage": "http://www.yiiframework.com/",
+    "name": "STAS-hr",
+    "description": "STAS-hr",
+    "keywords": ["STAS"],
+    "homepage": "http://njtech.net/",
     "type": "project",
     "license": "BSD-3-Clause",
     "support": {
