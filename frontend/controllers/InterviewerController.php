@@ -34,7 +34,7 @@ class InterviewerController extends BaseController
             ];
         }
 
-        $res = ResumeForm::getlist($cond,$curPage,10, ['sign_table.id' => SORT_DESC]);
+        $res = ResumeForm::getListForIntrrviewer($cond,$curPage,10, ['sign_table.id' => SORT_DESC]);
 
         $pages = new Pagination(['totalCount'=>$res['count'], 'pageSize' => $res['pageSize']]);
         $res['page'] = $pages;
