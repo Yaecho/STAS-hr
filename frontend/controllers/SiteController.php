@@ -80,7 +80,7 @@ class SiteController extends BaseController
 
         $switch = \common\models\SettingModel::findOne('resume');
         if($switch->value === 'false') {
-            $smsData = \common\models\SettingModel::findOne('smscontect');
+            $smsData = \common\models\SettingModel::findOne('sms_templete');
             $smsTemplate = explode('$code$',$smsData->value);
             $info = $smsTemplate[0].'（见短信通知）'.$smsTemplate[1];
             return $this->render('info',['info' => $info, 'nav' => '1', 'h2' => '报名未开启或已关闭']);

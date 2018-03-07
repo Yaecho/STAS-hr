@@ -21,12 +21,12 @@ class SmsController extends BaseController
         $sms['res'] = $model->find()->where(['not_recycling'=>'1', 'res' => '1'])->count();
 
         $model = new SettingModel();
-        $smsPost = Yii::$app->request->post('smscontect');
-        $smsData = $model::findOne(['name' => 'smscontect']);
+        $smsPost = Yii::$app->request->post('sms_templete');
+        $smsData = $model::findOne(['name' => 'sms_templete']);
 
         if(!empty($smsPost)){
             if (!$smsData){
-                $model->name = 'smscontect';
+                $model->name = 'sms_templete';
                 $model->value = $smsPost;
             }else{
                 $model = $smsData;
@@ -39,14 +39,14 @@ class SmsController extends BaseController
             }
         }
 
-        $smsData = $model::findOne(['name' => 'smscontect']);
+        $smsData = $model::findOne(['name' => 'sms_templete']);
         if (!$smsData){
             $smsData['value'] = '';
         }else{
             $smsData['value'] = $smsData->value;
         }
 
-        return $this->render('index', ['smsCount' => $sms, 'smsContect' => $smsData['value']]);
+        return $this->render('index', ['smsCount' => $sms, 'sms_templete' => $smsData['value']]);
     }
 
     public function actionPhoneNumber()
