@@ -10,14 +10,14 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=STASdata',
-            'username' => 'STASdata',
+            'username' => 'stas',
             'password' => 'o769Vhuyx7FRtzXm',
             'charset' => 'utf8',
         ],
         'dbmb4' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=STASdata',     
-            'username' => 'STASdata',
+            'username' => 'stas',
             'password' => 'o769Vhuyx7FRtzXm',
             'charset' => 'utf8mb4',
         ],
@@ -25,14 +25,6 @@ return [
             'class' => 'yii\web\DbSession',
             // 'db' => 'mydb',  // 数据库连接的应用组件ID，默认为'db'.
             // 'sessionTable' => 'my_session', // session 数据表名，默认为'session'.
-        ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@common/mail',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
         ],
         'request' => [
             // Enable Yii Validate CSRF Token
