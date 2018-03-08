@@ -59,6 +59,17 @@ class SettingModel extends \common\models\base\BaseModel
         return false;
     }
 
+    public function changeSendSms()
+    {
+        $sendSms = self::findOne(['name' => 'send_sms']);
+        if ($sendSms->value === 'true') {
+            $sendSms->value = 'false';
+        } else {
+            $sendSms->value = 'true';
+        }
+        return $sendSms->save();
+    }
+
     public function IUrl($url = null)
     {
         if (is_null($url)) {

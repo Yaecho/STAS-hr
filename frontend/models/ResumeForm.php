@@ -374,7 +374,7 @@ class ResumeForm extends Model
     public static function smsData($pageSize)
     {
         $model = new SettingModel();
-        $smsData = $model::findOne(['name' => 'smscontect']);
+        $smsData = $model::findOne(['name' => 'sms_templete']);
         $smsTemplate = explode('$code$',$smsData->value);
         
         $model = new ResumeModel();
