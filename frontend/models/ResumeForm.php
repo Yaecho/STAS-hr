@@ -148,9 +148,8 @@ class ResumeForm extends Model
     {
         $model = new ResumeModel();
         $id = $event->data['id'];
-        $code =  $event->data['created_time'].$id;
-        $code = substr($code,-6);
-
+        //生成短信确认码code;
+        $code = $this->makeCode();
 
         $result = $model->updateAll(['code'=>$code],['id'=>$id]);
 
@@ -368,36 +367,21 @@ class ResumeForm extends Model
         return $data;
     }
 
-    /*
-    * 短信
-    */
-    public static function smsData($pageSize)
+    /**
+     * 生成短信验证码
+     *
+     * @return int
+     * @author Yaecho 
+     */
+    public function makeCode()
     {
-        $model = new SettingModel();
-        $smsData = $model::findOne(['name' => 'sms_templete']);
-        $smsTemplate = explode('$code$',$smsData->value);
-        
         $model = new ResumeModel();
-        $resumes = $model::find()->select(['id', 'phone', 'code'])->where(['not_recycling' => '1', 'res' => '0', 'is_send' => '0'])
-        ->limit($pageSize)->asArray()->all();
-        
-        $data['mobile'] = '';$data['text'] = '';
-        foreach($resumes as $v){
-            $data['mobile'] .= $v['phone'].',';
-            $data['text'] .= $smsTemplate[0].$v['code'].$smsTemplate[1].',';
+        $code = rand(1,999999);
+        $code = str_pad($code, 6, '0', STR_PAD_LEFT);
+        if (null === $model->findOne(['code' => $code])) {
+            return $code;
         }
-        $ids = array_column($resumes, 'id');
-        return ['data'=>$data, 'id' => $ids];
-    }
-
-    /*
-    *  更新is_send字段
-    */
-    public static function updateIsSend(array $ids)
-    {
-        $model = new ResumeModel();
-        $res = $model::updateAll(['is_send' => 1], ['id' => $ids]);
-        return $res;
+        return $this->makeCode();
     }
 
 }
