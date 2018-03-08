@@ -23,11 +23,7 @@ $this->params['nav'] = '1';
                             <input type="text" name="ResumeForm[name]" id="name" class="am-form-field" maxlength="25" placeholder="输入真实姓名" data-validation-message="请输入真实姓名" required="">
                         </div>
                         <div class="am-form-group">
-                            <h3>2、学号：</h3>
-                            <input type="number" name="ResumeForm[sid]" id="sid" class="am-form-field" placeholder="输入十位学号" data-validation-message="请输入十位学号" pattern="^\d{10}$" required="">
-                        </div>
-                        <div class="am-form-group">
-                            <h3>3、性别：</h3>
+                            <h3>2、性别：</h3>
                             <label class="am-radio">
                                 <input type="radio" name="ResumeForm[sex]" value="男" data-am-ucheck required> 男
                             </label>
@@ -36,17 +32,21 @@ $this->params['nav'] = '1';
                             </label>
                         </div>
                         <div class="am-form-group">
-                            <h3>4、出生年月：</h3>
+                            <h3>3、学号：</h3>
+                            <input type="number" name="ResumeForm[sid]" id="sid" class="am-form-field" placeholder="输入十位学号" data-validation-message="请输入十位学号" pattern="^\d{10}$" required="">
+                        </div>
+                        <div class="am-form-group">
+                            <h3>4、籍贯：</h3>
+                            <input type="text" name="ResumeForm[place]" id="place" class="am-form-field" placeholder="输入你的籍贯" minlength="1" maxlength="30" required="">
+                        </div>
+                        <div class="am-form-group">
+                            <h3>5、出生年月：</h3>
                             <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm', viewMode: 'years', minViewMode: 'months'}">
                                 <input type="text" class="am-form-field" name="ResumeForm[birthday]" id="birthday" placeholder="输入你的出生年月" readonly required>
                                 <span class="am-input-group-btn am-datepicker-add-on">
                                   <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
                                 </span>
                             </div>
-                        </div>
-                        <div class="am-form-group">
-                            <h3>5、籍贯：</h3>
-                            <input type="text" name="ResumeForm[place]" id="place" class="am-form-field" placeholder="输入你的籍贯" minlength="1" maxlength="30" required="">
                         </div>
                         <div class="am-form-group">
                             <h3>6、政治面貌：</h3>
