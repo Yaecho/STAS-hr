@@ -5,6 +5,8 @@ protected/runtime/*
 protected/data/*.db
 themes/classic/views/
 /.idea
-composer.lock
 vendor/*
 /.vscode
+/yii
+/yii_test
+/yii_test.bat
